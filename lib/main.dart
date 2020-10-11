@@ -10,6 +10,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MyApp());
+
+  //aaa
 }
 
 class MyApp extends StatefulWidget {
