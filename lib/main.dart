@@ -4,6 +4,7 @@ import 'package:inventoryproject/model/home_page.dart';
 import 'package:inventoryproject/utils/screens.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/bx_provider.dart';
 import 'provider/providers.dart';
 
 void main() async {
@@ -11,7 +12,6 @@ void main() async {
 
   runApp(MyApp());
 
-  //aaabbb
 }
 
 class MyApp extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers,
-      child: Consumer(builder: (context, providers, _) {
+      child: Consumer<BxProvide>(builder: (context, providers, _) {
         return MaterialApp(
           theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
