@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:inventoryproject/model/home_page.dart';
 import 'package:inventoryproject/utils/screens.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/bx_provider.dart';
@@ -9,6 +10,7 @@ import 'provider/providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
 
   runApp(MyApp());
 
@@ -20,6 +22,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -34,5 +37,15 @@ class _MyAppState extends State<MyApp> {
         );
       }),
     );
+  }
+
+  @override
+  void initState() {
+    permissionRequest();
+    super.initState();
+  }
+
+  permissionRequest() async {
+    PermissionStatus status = await Permission.storage.request();
   }
 }

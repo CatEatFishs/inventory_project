@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int index = 0;
   BxProvide provide;
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1080, height: 1920);
@@ -49,12 +50,12 @@ class _HomePageState extends State<HomePage> {
           ),
           GestureDetector(
             onTap: () {
-              provide.insert(new GoodAttributeModel(intAndOut: '1',
-                  type: 'bx',
-                  model: 'bx001',
-                  price: '200',
-                  num: '10',
-                  time: '2020.10.12'));
+//              provide.insert(new GoodAttributeModel(intAndOut: '1',
+//                  type: 'bx',
+//                  model: 'bx001',
+//                  price: '200',
+//                  num: '10',
+//                  time: '2020.10.12'));
             },
             child: Text('出入库'),
           ),
