@@ -50,12 +50,10 @@ class _HomePageState extends State<HomePage> {
           ),
           GestureDetector(
             onTap: () {
-//              provide.insert(new GoodAttributeModel(intAndOut: '1',
-//                  type: 'bx',
-//                  model: 'bx001',
-//                  price: '200',
-//                  num: '10',
-//                  time: '2020.10.12'));
+              debugPrint('是否存在---${provide.isTableExit()}');
+
+//              bool isTableExits=GoodAttributeTable().isTableExits;
+//              debugPrint('数据库是否存在 isTableExits===$isTableExits');
             },
             child: Text('出入库'),
           ),

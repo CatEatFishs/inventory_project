@@ -8,10 +8,19 @@ import 'package:sqflite/sqflite.dart';
 
 //冰箱provide
 class BxProvide extends ChangeNotifier {
-  init() {
+  Database database;
+
+  init() async {
     debugPrint('创建数据库--BxProvide');
-    GoodAttributeTable().getDataBase();
+    database = await GoodAttributeTable().getDataBase();
+    if (database == null) {
+      debugPrint('数据库空');
+    } else {
+      debugPrint('数据库不空');
+    }
   }
 
-
+  bool isTableExit() {
+    return GoodAttributeTable().isTableExits;
+  }
 }
