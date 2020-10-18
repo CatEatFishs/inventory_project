@@ -36,12 +36,12 @@ class GoodAttributeTable extends BaseProvider {
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
-      intAndOut: intAndOut,
-      type: type,
-      model: model,
-      price: price,
-      num: num,
-      time: time
+      _columnIntAndOut: intAndOut,
+      _columnType: type,
+      _columnModel: model,
+      _columnPrice: price,
+      _columnNum: num,
+      _columnTime: time
     };
     return map;
   }
@@ -50,12 +50,12 @@ class GoodAttributeTable extends BaseProvider {
       {this.intAndOut, this.type, this.model, this.price, this.num, this.time});
 
   GoodAttributeTable.fromMap(Map<String, dynamic> map) {
-    intAndOut = map[intAndOut];
-    type = map[type];
-    model = map[model];
-    price = map[price];
-    num = map[num];
-    time = map[time];
+    intAndOut = map[_columnIntAndOut];
+    type = map[_columnType];
+    model = map[_columnModel];
+    price = map[_columnPrice];
+    num = map[_columnNum];
+    time = map[_columnTime];
   }
 
   @override
@@ -69,54 +69,43 @@ class GoodAttributeTable extends BaseProvider {
     debugPrint('创建数据库');
     return tableBaseString(tableName, _columnId) +
         """
-        $intAndOut text ,
-        $type text ,
-        $model text ,
-        $price text ,
-        $num integer ,
-        $time text )
+        $_columnIntAndOut text ,
+        $_columnType text ,
+        $_columnModel text ,
+        $_columnPrice text ,
+        $_columnNum integer ,
+        $_columnTime text )
         """;
   }
 
   ///插入数据
-  Future<void> insert() async {
-    Database dataBase = await getDataBase();
-/*
-    //2-如果表不存在就创建表  //3-插入数据
-
-    String sql = """insert or replace into $tableName (
-    $_columnIntAndOut ,
-    $_columnType ,
-    $_columnModel ,
-    $_columnPrice ,
-    $_columnNum ,
-    $_columnTime
-    ) values(
-    '$intAndOut',
-    '$type',
-    '$model',
-    '$price',
-    '$num',
-    '$time'
-    )
-    """;
-    return dataBase.execute(sql);
-
- */
-    var count = await dataBase.insert(tableName, toMap());
+  Future<int> insert(Database database, GoodAttributeTable table) async {
+    if (database == null) {
+      database = await this.getDataBase();
+      return database.insert(
+          this.getTableName(), table.toMap());
+    } else {
+      return database.insert(this.getTableName(), table.toMap());
+    }
   }
 
-/*
+
   ///查询表中所有的数据
-  Future<List<GoodAttributeTable>> queryAll() async {
-    Database dataBase = await getDataBase();
-    String sql = "select * from $tableName where $_columnJGUsername='${App.getInstance()?.getSelfInfo()?.jgUsername}'";
-    List<Map<String, dynamic>> result = await dataBase.rawQuery(sql);
+  Future<List<GoodAttributeTable>> queryAll(Database database) async {
+    List<Map<String, dynamic>> result = await database.query(tableName,
+        columns: [
+          _columnId,
+          _columnIntAndOut,
+          _columnType,
+          _columnModel,
+          _columnPrice,
+          _columnNum,
+          _columnTime
+        ]);
 
     List<GoodAttributeTable> newList = List();
 
     if (result != null) {
-      newList.clear();
       result.forEach((value) {
         newList.add(GoodAttributeTable.fromMap(value));
       });
@@ -125,6 +114,5 @@ class GoodAttributeTable extends BaseProvider {
     return newList;
   }
 
-   */
 
 }
