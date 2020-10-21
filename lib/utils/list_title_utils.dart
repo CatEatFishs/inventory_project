@@ -14,6 +14,7 @@ class ListTitleUtils {
   static TextStyle _textLeaveLeadingStyle =
       TextStyle(fontSize: setSp(32), color: Colors.black);
 
+
   static Widget ListTitle({String leadingStr, String title}) {
     return Container(
       height: setWidth(94),
