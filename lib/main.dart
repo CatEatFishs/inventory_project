@@ -24,6 +24,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   @override
+  void initState() {
+    permissionRequest();
+    AdaptUtils.init(750, 1334);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers,
@@ -39,11 +46,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  @override
-  void initState() {
-    permissionRequest();
-    super.initState();
-  }
 
   permissionRequest() async {
     PermissionStatus status = await Permission.storage.request();

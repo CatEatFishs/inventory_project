@@ -5,50 +5,65 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
-class Screens {
-  const Screens._();
+class AdaptUtils {
+  static double _screenWidth = 1080;
 
-  static MediaQueryData get mediaQuery => MediaQueryData.fromWindow(ui.window);
+  static double _screenHeight = 1920;
 
-  static double fixedFontSize(double fontSize) => fontSize / textScaleFactor;
+  static double _widthRatio;
+  static double _textScaleFactor;
 
-  static double get width => mediaQuery.size.width;
+  static double designWidth = 750;
+  static double designHeight = 1334;
 
-  static double get height => mediaQuery.size.height;
+  static init(double uiWidth, double uiHeight) {
+    designWidth = uiWidth;
+    designHeight = uiHeight;
 
-  static double get scale => mediaQuery.devicePixelRatio;
+    double devicePixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
+    double physicalSizeWidth = WidgetsBinding.instance.window.physicalSize.width;
+    double physicalSizeHeight = WidgetsBinding.instance.window.physicalSize.height;
 
-  static double get textScaleFactor => mediaQuery.textScaleFactor;
+    _textScaleFactor = WidgetsBinding.instance.window.textScaleFactor;
 
-  static double get navigationBarHeight => mediaQuery.padding.top + kToolbarHeight;
+//    _screenWidth = physicalSizeWidth ;
+//    _screenHeight = physicalSizeHeight ;
+    _screenWidth = physicalSizeWidth / devicePixelRatio;
+    _screenHeight = physicalSizeHeight / devicePixelRatio;
 
-  static double get topSafeHeight => mediaQuery.padding.top;
+    _widthRatio = _screenWidth / designWidth;
 
-  static double get bottomSafeHeight => mediaQuery.padding.bottom;
-
-  static double get safeHeight => height - topSafeHeight - bottomSafeHeight;
-
-  static void updateStatusBarStyle(SystemUiOverlayStyle style) {
-    SystemChrome.setSystemUIOverlayStyle(style);
   }
 
+  ///高度的适配
+  static double pxH(number) {
+    return number * _widthRatio;
+  }
+
+  ///宽度的适配
+  static double pxW(number) {
+    return number * _widthRatio;
+  }
+
+  ///字体的适配
+  static double pxF(number) {
+    return pxW(number) / _textScaleFactor;
+  }
+
+  static double screenW() {
+    return _screenWidth;
+  }
+
+  static double screenH() {
+    return _screenHeight;
+  }
 }
- double setWidth(double size) =>ScreenUtil().setWidth(size);
- double setHeight(double size)=>ScreenUtil().setHeight(size);
- double setSp(double fontSize)=>ScreenUtil().setSp(fontSize);
+double getScreenWidth()=>AdaptUtils.screenW();
 
+double getScreenHeight()=>AdaptUtils.screenH();
 
-//    _sizeCapable(ScreenUtil().setSp(size) * 2, scale: scale);
+double setWidth(double size) =>AdaptUtils.pxW(size);
 
-///// Screen capability method.
-//double suSetSp(double size, {double scale}) =>
-//    _sizeCapable(ScreenUtil().setSp(size) * 2, scale: scale);
-//
-//double suSetWidth(double size, {double scale}) =>
-//    _sizeCapable(ScreenUtil().setWidth(size) * 2, scale: scale);
-//
-//double suSetHeight(double size, {double scale}) =>
-//    _sizeCapable(ScreenUtil().setHeight(size) * 2, scale: scale);
-//
-//double _sizeCapable(double size, {double scale}) =>
-//    size * 1.0;
+double setHeight(double size) =>AdaptUtils.pxH(size);
+
+double setSp(double size) =>AdaptUtils.pxF(size);
