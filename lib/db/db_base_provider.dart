@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'db_manager.dart';
 
 ///数据库表的基类

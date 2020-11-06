@@ -27,12 +27,16 @@ class GoodAttributeTable extends BaseProvider {
   //出入库时间
   final String _columnTime = 'time';
 
+  //系统时间
+  final String _columnSystemTime = 'systemTime';
+
   String intAndOut; //出入库
   String type; //类型
   String model; //型号
   String price; //价格
   String num; //数量
   String time; //出入库时间
+  String systemTime; //系统时间
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -41,13 +45,20 @@ class GoodAttributeTable extends BaseProvider {
       _columnModel: model,
       _columnPrice: price,
       _columnNum: num,
-      _columnTime: time
+      _columnTime: time,
+      _columnSystemTime: systemTime
     };
     return map;
   }
 
   GoodAttributeTable(
-      {this.intAndOut, this.type, this.model, this.price, this.num, this.time});
+      {this.intAndOut,
+      this.type,
+      this.model,
+      this.price,
+      this.num,
+      this.time,
+      this.systemTime});
 
   GoodAttributeTable.fromMap(Map<String, dynamic> map) {
     intAndOut = map[_columnIntAndOut];
@@ -56,6 +67,7 @@ class GoodAttributeTable extends BaseProvider {
     price = map[_columnPrice];
     num = map[_columnNum];
     time = map[_columnTime];
+    systemTime = map[_columnSystemTime];
   }
 
   @override
@@ -73,8 +85,9 @@ class GoodAttributeTable extends BaseProvider {
         $_columnType text ,
         $_columnModel text ,
         $_columnPrice text ,
-        $_columnNum integer ,
-        $_columnTime text )
+        $_columnNum text ,
+        $_columnTime text ,
+        $_columnSystemTime text)
         """;
   }
 
@@ -100,7 +113,8 @@ class GoodAttributeTable extends BaseProvider {
           _columnModel,
           _columnPrice,
           _columnNum,
-          _columnTime
+          _columnTime,
+          _columnSystemTime
         ]);
 
     List<GoodAttributeTable> newList = List();

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/screenutil.dart';
 import 'package:inventoryproject/model/home_page.dart';
 import 'package:inventoryproject/utils/screens.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 import 'provider/bx_provider.dart';
 import 'provider/providers.dart';
@@ -22,7 +23,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     permissionRequest();
@@ -32,7 +32,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return OKToast(
+        child: MultiProvider(
       providers: providers,
       child: Consumer<BxProvide>(builder: (context, providers, _) {
         return MaterialApp(
@@ -43,7 +44,7 @@ class _MyAppState extends State<MyApp> {
           home: HomePage(),
         );
       }),
-    );
+    ));
   }
 
 

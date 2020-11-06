@@ -151,4 +151,8 @@ class NavigatorRoute {
       Navigator.of(context).pop();
     }
   }
+
+  static Future<T> pop<T extends Object>(BuildContext context) {
+    Navigator.pop(context);
+  }
 }

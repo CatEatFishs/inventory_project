@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:inventoryproject/db/good_attribute_table.dart';
-import 'package:inventoryproject/model/good_attribute_model.dart';
 import 'package:inventoryproject/model/in_or_out_page.dart';
 import 'package:inventoryproject/model/record_page.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
@@ -10,11 +8,8 @@ import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/route_navigator.dart';
 import 'package:inventoryproject/utils/screens.dart';
 import 'package:provider/provider.dart';
-
-import '../utils/screens.dart';
 import '../utils/screens.dart';
 import 'good_show_page.dart';
-import 'in_out_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     provide = Provider.of<BxProvide>(context, listen: false);
     return Scaffold(
       bottomNavigationBar: bottomNavigationBarWidget(),
-      backgroundColor: R.color_gray_666,
+      backgroundColor: Colors.white,
       body: IndexedStack(
         children: <Widget>[GoodShowPage(), RecordPage()],
         index: homeTabIndex,
@@ -40,22 +35,31 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget bottomNavigationBarWidget() {
-
-
     String goodImage;
     double goodFont;
-    String goodColor;
+    Color goodColor;
     String recordImage;
-    String recordFont;
-    switch(homeTabIndex){
+    double recordFont;
+    Color recordColor;
+    switch (homeTabIndex) {
       case 0:
-        goodImage='images/icons/home_red_icon.png';
-        goodFont=setSp(26);
+        goodImage = 'images/icons/home_red_icon.png';
+        goodFont = setSp(26);
+        goodColor = R.color_red_d81e;
+
+        recordImage = 'images/icons/record_gray_icon.png';
+        recordFont = setSp(24);
+        recordColor = R.color_gray_8a8a;
+
         break;
       case 1:
-        break;
-      case 2:
+        goodImage = 'images/icons/home_black_icon.png';
+        goodFont = setSp(24);
+        goodColor = Colors.black;
 
+        recordImage = 'images/icons/record_black_icon.png';
+        recordFont = setSp(26);
+        recordColor = Colors.black;
         break;
     }
 
@@ -74,15 +78,17 @@ class _HomePageState extends State<HomePage> {
           GestureDetector(
             onTap: () {
               setState(() {
-                index = 0;
+                homeTabIndex = 0;
               });
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset('images/icons/home_red_icon.png',width: setWidth(40),height: setHeight(40),),
-                Text(' 商品',style: TextStyle(color: R.color_red_d81e,fontSize: setSp(26)),),
+                Image.asset(
+                  goodImage, width: setWidth(40), height: setHeight(40),),
+                Text(' 商品',
+                  style: TextStyle(color: goodColor, fontSize: goodFont),),
               ],
             ),
           ),
@@ -95,10 +101,19 @@ class _HomePageState extends State<HomePage> {
           GestureDetector(
             onTap: () {
               setState(() {
-                index = 1;
+                homeTabIndex = 1;
               });
             },
-            child: Text('记录'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  recordImage, width: setWidth(40), height: setHeight(40),),
+                Text(' 记录',
+                  style: TextStyle(color: recordColor, fontSize: recordFont),),
+              ],
+            ),
           ),
         ],
       ),

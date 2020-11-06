@@ -15,25 +15,45 @@ class ListTitleUtils {
       TextStyle(fontSize: setSp(32), color: Colors.black);
 
 
-  static Widget ListTitle({String leadingStr, String title}) {
+  static Widget listTitle(
+      {String leadingStr, String title, Function function}) {
     return Container(
       height: setWidth(94),
-//      child: Center(
-//        child: ListTile(
-//          leading: Text(
-//            leadingStr,
-//            style: _textLeadingStyle,
-//          ),
-//          title: Text(
-//            title ?? '',
-//            style: _textTitleStyle,
-//          ),
-//          contentPadding: EdgeInsets.symmetric(horizontal: AdaptUtils.pxW(30)),
+      child: Center(
+        child: ListTile(
+          leading: Text(
+            leadingStr,
+            style: _textLeadingStyle,
+          ),
+          title: Text(
+            title ?? '',
+            style: _textLeadingStyle,
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 30),
 //          trailing: trailing,
-//          onTap: function,
-//          dense: true,
-//        ),
-//      ),
+          onTap: function,
+          dense: true,
+        ),
+      ),
+    );
+  }
+
+  static Widget listTitleEdit(
+      {String leadingStr, Widget editText, Function function}) {
+    return Container(
+      height: setWidth(94),
+      child: Center(
+        child: ListTile(
+          leading: Text(
+            leadingStr,
+            style: _textLeadingStyle,
+          ),
+          title: editText,
+          contentPadding: EdgeInsets.symmetric(horizontal: 30),
+          onTap: function,
+          dense: true,
+        ),
+      ),
     );
   }
 }
