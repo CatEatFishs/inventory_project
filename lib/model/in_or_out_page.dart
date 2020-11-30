@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
+import 'package:inventoryproject/provider/ds_provider.dart';
+import 'package:inventoryproject/provider/kt_provider.dart';
 import 'package:inventoryproject/provider/providers.dart';
+import 'package:inventoryproject/provider/rqz_provider.dart';
+import 'package:inventoryproject/provider/rsq_provider.dart';
+import 'package:inventoryproject/provider/xyj_provider.dart';
+import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/R.dart';
+import 'package:inventoryproject/utils/date_utils.dart';
 import 'package:inventoryproject/utils/list_title_utils.dart';
 import 'package:inventoryproject/utils/route_navigator.dart';
 import 'package:inventoryproject/utils/screens.dart';
@@ -21,6 +29,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
   List<String> goodTypeList = [];
   String inOrOutTitle = '入库';
   String goodTypeTitle = '冰箱';
+  String goodTime;
   TextEditingController xhController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController numController = TextEditingController();
@@ -33,7 +42,9 @@ class _InOrOutPageState extends State<InOrOutPage> {
 
   setData() {
     inOrOutList = ['入库', '出库'];
-    goodTypeList = ['冰箱', '洗衣机', '空调', '电视', '燃气灶', '抽烟机', '热水器'];
+    goodTypeList = ['冰箱', '洗衣机', '空调', '电视', '燃气灶', '油烟机', '热水器'];
+    goodTime =
+        '${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -77,6 +88,10 @@ class _InOrOutPageState extends State<InOrOutPage> {
                 color: R.color_gray_666,
                 height: setWidth(1),
               ),
+              ListTitleUtils.listTitle(
+                  leadingStr: '出入库时间：',
+                  title: goodTime,
+                  function: _showDatePicker),
             ],
           ),
           Align(
@@ -176,6 +191,19 @@ class _InOrOutPageState extends State<InOrOutPage> {
     );
   }
 
+  ///出生日期选择器
+  void _showDatePicker() {
+    PickerUtils.showDatePicker(context, middleTitle: '选择日期',
+        type: PickerDateTimeType.kYMD,
+        onConfirm: (dateTime) {
+          setState(() {
+            goodTime =
+            '${dateTime.year.toString()}-${dateTime.month.toString().padLeft(
+                2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          });
+        });
+  }
+
   GoodAttributeTable table;
 
   //检查参数是否填写
@@ -189,38 +217,59 @@ class _InOrOutPageState extends State<InOrOutPage> {
         type: goodTypeTitle,
         model: xhController.text.trim(),
         price: priceController.text.trim(),
-        num: numController.text.trim(),
-        time: '2020-11-04',
+        num: inOrOutTitle == '出库'
+            ? '-${numController.text.trim()}'
+            : '${numController.text.trim()}',
+        time: DateUtils.DatePaserToMils(goodTime),
         systemTime: DateTime.now().toString());
     setType();
   }
 
-  BxProvide bxProvider;
 
   //插入数据库
   setType() async {
     switch (goodTypeTitle) {
       case '冰箱':
-        bxProvider = Provider.of<BxProvide>(context, listen: false);
+        BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
         await bxProvider.insertData(table);
         await bxProvider.queryAll();
         break;
       case '洗衣机':
+        XyjProvide xyjProvider = Provider.of<XyjProvide>(
+            context, listen: false);
+        await xyjProvider.insertData(table);
+        await xyjProvider.queryAll();
         break;
       case '空调':
+        KtProvide ktProvide = Provider.of<KtProvide>(context, listen: false);
+        await ktProvide.insertData(table);
+        await ktProvide.queryAll();
         break;
       case '电视':
+        DsProvide dsProvider = Provider.of<DsProvide>(context, listen: false);
+        await dsProvider.insertData(table);
+        await dsProvider.queryAll();
         break;
       case '燃气灶':
+        RqzProvide rqzProvide = Provider.of<RqzProvide>(context, listen: false);
+        await rqzProvide.insertData(table);
+        await rqzProvide.queryAll();
         break;
-      case '抽烟机':
+      case '油烟机':
+        YyjProvide yyjProvide = Provider.of<YyjProvide>(context, listen: false);
+        await yyjProvide.insertData(table);
+        await yyjProvide.queryAll();
         break;
       case '热水器':
+        RsqProvide rsqProvide = Provider.of<RsqProvide>(context, listen: false);
+        await rsqProvide.insertData(table);
+        await rsqProvide.queryAll();
         break;
     }
 
     NavigatorRoute.pop(context);
   }
+
 
   pressedFunction() {
     checkParams();

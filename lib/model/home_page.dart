@@ -63,9 +63,6 @@ class _HomePageState extends State<HomePage> {
         break;
     }
 
-
-
-
     return SafeArea(
         child: Container(
       height: setHeight(98.0),

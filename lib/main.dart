@@ -11,10 +11,8 @@ import 'provider/providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-
+  List<SingleChildWidget> provider = providers;
   runApp(MyApp());
-
 }
 
 class MyApp extends StatefulWidget {
@@ -27,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     permissionRequest();
     AdaptUtils.init(750, 1334);
+
     super.initState();
   }
 

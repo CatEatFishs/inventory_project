@@ -8,26 +8,26 @@ import 'package:inventoryproject/provider/rqz_provider.dart';
 import 'package:inventoryproject/provider/rsq_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
+import 'package:inventoryproject/utils/date_utils.dart';
 import 'package:provider/provider.dart';
 
-//展示每个分类
-class GoodShowListPage extends StatefulWidget {
+//剩余数量页面
+class GoodShowResidueList extends StatefulWidget {
   final String goodName;
 
-  const GoodShowListPage({Key key, this.goodName = '冰箱'}) : super(key: key);
+  const GoodShowResidueList({Key key, this.goodName = '冰箱'}) : super(key: key);
 
   @override
-  _GoodShowListPageState createState() => _GoodShowListPageState();
+  _GoodShowResidueListState createState() => _GoodShowResidueListState();
 }
 
-class _GoodShowListPageState extends State<GoodShowListPage> {
+class _GoodShowResidueListState extends State<GoodShowResidueList> {
   List<GoodAttributeTable> goodList = [];
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      debugPrint('list instance');
-      // checkDataBase();
+      // getChcek();
     });
     super.initState();
   }
@@ -37,25 +37,24 @@ class _GoodShowListPageState extends State<GoodShowListPage> {
       onTap: getChcek,
       child: Container(
           child: Table(
-            //表格边框样式
-            border: TableBorder.all(
-              color: Colors.red,
-            ),
-            children: (list
-                .asMap()
-                .map((index, model) =>
-                MapEntry(
-                    index,
-                    TableRow(children: [
-                      Text('${list[index].model}'),
-                      Text('${list[index].intAndOut}'),
-                      Text('${list[index].price}'),
-                      Text('${list[index].num}'),
-                      Text('${list[index].time}'),
-                    ])))
-                .values
-                .toList()),
-          )),
+        //表格边框样式
+        border: TableBorder.all(
+          color: Colors.red,
+        ),
+        children: (list
+            .asMap()
+            .map((index, model) => MapEntry(
+                index,
+                TableRow(children: [
+                  Text('${list[index].model}'),
+                  Text('${list[index].intAndOut}'),
+                  Text('${list[index].price}'),
+                  Text('${list[index].num}'),
+                  Text('${DateUtils.DatePaserToYMD(list[index].time)}'),
+                ])))
+            .values
+            .toList()),
+      )),
     );
   }
 
@@ -145,9 +144,5 @@ class _GoodShowListPageState extends State<GoodShowListPage> {
   void getChcek() async {
     BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
     List<ResidueGoodModel> goodLists = await bxProvider.queryResidueAll();
-    debugPrint('goodListsLength---${goodLists.length}');
-    for (int i = 0; i < goodLists.length; i++) {
-      debugPrint('element-----${goodLists[i].model.toString()}');
-    }
   }
 }

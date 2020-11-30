@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:inventoryproject/utils/screens.dart';
+
+import 'R.dart';
 
 /// picker管理类
 class PickerUtils {
@@ -54,6 +57,67 @@ class PickerUtils {
   // 移除焦点
   static void removeFocus(BuildContext context) {
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  /// 年月日picker
+  /// type:日期时间类型，使用PickerDateTimeType枚举
+  /// yearSuffix monthSuffix daySuffix年月日后缀
+  /// initDateTime: 初始化的日期值
+  /// minDateTime：最小日期（不限制可不传）
+  /// maxDateTime：最大日期（不限制可不传）
+  /// 返回值: DateTime
+  static showDatePicker(
+    BuildContext context, {
+    String middleTitle,
+    int type = PickerDateTimeType.kYMDHMS,
+    DateTime initDateTime,
+    DateTime minDateTime,
+    DateTime maxDateTime,
+//    String yearSuffix = '年',
+//    String monthSuffix = '月',
+//    String daySuffix = '日',
+    Function(DateTime dateTime) onConfirm,
+  }) {
+    removeFocus(context);
+    Picker(
+      adapter: new DateTimePickerAdapter(
+        type: type,
+        isNumberMonth: true,
+        value: initDateTime,
+        minValue: minDateTime,
+        maxValue: maxDateTime,
+        yearSuffix: '年',
+        monthSuffix: '月',
+        daySuffix: '日',
+//        yearSuffix: yearSuffix,
+//        monthSuffix: monthSuffix,
+//        daySuffix: daySuffix,
+      ),
+      height: 250,
+      title: new Text(
+        middleTitle,
+        style: TextStyle(
+          fontSize: setSp(30),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      cancelText: '取消',
+      cancelTextStyle: TextStyle(
+        fontSize: setSp(30),
+        color: R.color_gray_666,
+      ),
+      textStyle: TextStyle(color: R.color_gray_666, fontSize: setSp(30)),
+      selectedTextStyle: TextStyle(color: Colors.black, fontSize: setSp(36)),
+      confirmText: '确定',
+      confirmTextStyle: TextStyle(
+        fontSize: setSp(30),
+        color: R.color_blue_108EE9,
+      ),
+      onConfirm: (Picker picker, List value) {
+        DateTime _dateTime = DateTime.parse(picker.adapter.toString());
+        onConfirm(_dateTime);
+      },
+    ).showModal(context);
   }
 
 // pickerData参考示例

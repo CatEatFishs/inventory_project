@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:inventoryproject/model/good_show_list_page.dart';
 import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/screens.dart';
+
+import 'good_show_residue_page.dart';
 
 class GoodShowPage extends StatefulWidget {
   @override
@@ -18,16 +21,13 @@ class _GoodShowPageState extends State<GoodShowPage>
     super.initState();
 
     myTabs = [
-      new Tab(
-        text: '冰箱',
-      ),
+      new Tab(text: '冰箱'),
       new Tab(text: '洗衣机'),
       new Tab(text: '空调'),
       new Tab(text: '电视'),
       new Tab(text: '燃气灶'),
-      new Tab(text: '抽烟机'),
-      new Tab(text: '热水器'),
-      new Tab(text: '壁挂炉')
+      new Tab(text: '油烟机'),
+      new Tab(text: '热水器')
     ];
     tabController = new TabController(length: myTabs.length, vsync: this);
   }
@@ -35,35 +35,49 @@ class _GoodShowPageState extends State<GoodShowPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: StaggeredGridView.countBuilder(crossAxisCount: 4,
+          itemBuilder: (BuildContext context, int index) {
+
+          },
+          staggeredTileBuilder: (int index) => new StaggeredTile.count(
+              2, index == 0 ? 2.5 : 3)),
+    );
+
+/*
+    return Scaffold(
       body: SafeArea(
           child: Container(
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            TabBar(
-                controller: tabController,
-                tabs: myTabs,
-                isScrollable: true,
-                indicatorColor: Colors.amber,
-                labelColor: Colors.black,
-                unselectedLabelColor: R.color_gray_666,
-                labelStyle: TextStyle(fontSize: setSp(32)),
-                unselectedLabelStyle: TextStyle(fontSize: setSp(28)),
-                indicatorSize: TabBarIndicatorSize.label),
-            Expanded(
-                flex: 1,
-                child: TabBarView(
-                  controller: tabController,
-                  children: myTabs
-                      .asMap()
-                      .map((index, model) => MapEntry(
-                          index, GoodShowListPage(goodName: model.text)))
-                      .values
-                      .toList(),
-                ))
-          ],
-        ),
-      )),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                TabBar(
+                    controller: tabController,
+                    tabs: myTabs,
+                    isScrollable: true,
+                    indicatorColor: Colors.amber,
+                    labelColor: Colors.black,
+                    unselectedLabelColor: R.color_gray_666,
+                    labelStyle: TextStyle(fontSize: setSp(32)),
+                    unselectedLabelStyle: TextStyle(fontSize: setSp(28)),
+                    indicatorSize: TabBarIndicatorSize.label),
+                Expanded(
+                    flex: 1,
+                    child: TabBarView(
+                      controller: tabController,
+                      children: myTabs
+                          .asMap()
+                          .map((index, model) => MapEntry(
+                          index, GoodShowResidueList(goodName: model.text)))
+                          .values
+                          .toList(),
+                    ))
+              ],
+            ),
+          )),
     );
+    */
   }
 }
+
+
+

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
+import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 //冰箱provide
 class BxProvide extends ChangeNotifier {
+  final String tableName = 'BxDateBaseTable';
   Database database;
   GoodAttributeTable goodAttributeTable;
   List<GoodAttributeTable> bxDataList = [];
@@ -11,6 +13,7 @@ class BxProvide extends ChangeNotifier {
   init() async {
     debugPrint('创建数据库--BxProvide');
     goodAttributeTable = GoodAttributeTable();
+    goodAttributeTable.setTabName = tableName;
     database = await goodAttributeTable.getDataBase();
     queryAll();
     if (database == null) {
@@ -37,6 +40,11 @@ class BxProvide extends ChangeNotifier {
     debugPrint('bxDataList length-${bxDataList.length}');
     notifyListeners();
     return bxDataList;
+  }
+
+  ///查询表中剩余物品的数据
+  Future<List<ResidueGoodModel>> queryResidueAll() async {
+    return await goodAttributeTable.queryResidueAll(database, tableName);
   }
 
   bool isTableExit() {

@@ -1,10 +1,14 @@
 //商品属性
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/db_base_provider.dart';
+import 'package:inventoryproject/model/residue_good_model.dart';
+import 'package:inventoryproject/utils/date_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 class GoodAttributeTable extends BaseProvider {
-  String tableName = 'BxDateBaseTable';
+  String tableName;
 
   //Id
   final String _columnId = "id";
@@ -59,6 +63,10 @@ class GoodAttributeTable extends BaseProvider {
       this.num,
       this.time,
       this.systemTime});
+
+  set setTabName(String tabName) {
+    this.tableName = tabName;
+  }
 
   GoodAttributeTable.fromMap(Map<String, dynamic> map) {
     intAndOut = map[_columnIntAndOut];
@@ -123,6 +131,33 @@ class GoodAttributeTable extends BaseProvider {
       result.forEach((value) {
         newList.add(GoodAttributeTable.fromMap(value));
       });
+    }
+
+    return newList;
+  }
+
+  //查询
+  // intAndOut: inOrOutTitle,
+  // type: goodTypeTitle,
+  // model: xhController.text.trim(),
+  // price: priceController.text.trim(),
+  // num: numController.text.trim(),
+  Future<List<ResidueGoodModel>> queryResidueAll(Database database,
+      String tableName, {String type, String model, String price}) async {
+    // String sql="SELECT * FROM $tableName WHERE $_columnIntAndOut='入库' ORDER BY time DESC";
+    String sql = "select model,time,sum(num) FROM $tableName group by model";
+
+    List<Map<String, dynamic>> result = await database.rawQuery(sql);
+    List<ResidueGoodModel> newList = List();
+
+
+    if (result != null) {
+      result.forEach((value) {
+        newList.add(ResidueGoodModel.fromJson(value));
+      });
+    }
+    for (int i = 0; i < newList.length; i++) {
+      debugPrint(newList[i].model);
     }
 
     return newList;

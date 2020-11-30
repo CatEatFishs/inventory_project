@@ -23,12 +23,11 @@ ChangeNotifierProvider<T> buildProvider<T extends ChangeNotifier>(T value) {
 List<SingleChildWidget> get providers => _providers;
 
 final _providers = [
-  buildProvider<BxProvide>(BxProvide()
-    ..init()),
-  buildProvider<DsProvide>(DsProvide()),
-  buildProvider<KtProvide>(KtProvide()),
-  buildProvider<RsqProvide>(RsqProvide()),
-  buildProvider<RqzProvide>(RqzProvide()),
-  buildProvider<XyjProvide>(XyjProvide()),
-  buildProvider<YyjProvide>(YyjProvide()),
+  buildProvider<BxProvide>(BxProvide()..init()),
+  buildProvider<DsProvide>(DsProvide()..init()),
+  buildProvider<KtProvide>(KtProvide()..init()),
+  buildProvider<RsqProvide>(RsqProvide()..init()),
+  buildProvider<RqzProvide>(RqzProvide()..init()),
+  buildProvider<XyjProvide>(XyjProvide()..init()),
+  buildProvider<YyjProvide>(YyjProvide()..init()),
 ];
