@@ -9,6 +9,7 @@ import 'package:inventoryproject/provider/rsq_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
+import 'package:inventoryproject/utils/screens.dart';
 import 'package:provider/provider.dart';
 
 //剩余数量页面
@@ -27,42 +28,121 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // getChcek();
+      getChcek();
     });
     super.initState();
   }
 
-  Widget tabWidget(List<GoodAttributeTable> list) {
-    return GestureDetector(
-      onTap: getChcek,
-      child: Container(
-          child: Table(
-        //表格边框样式
-        border: TableBorder.all(
-          color: Colors.red,
+  Widget tabWidget(List<ResidueGoodModel> list) {
+    return Column(
+      children: [
+        Offstage(
+          offstage: list.length == 0,
+          child: headWidget(),
         ),
-        children: (list
-            .asMap()
-            .map((index, model) => MapEntry(
-                index,
-                TableRow(children: [
-                  Text('${list[index].model}'),
-                  Text('${list[index].intAndOut}'),
-                  Text('${list[index].price}'),
-                  Text('${list[index].num}'),
-                  Text('${DateUtils.DatePaserToYMD(list[index].time)}'),
-                ])))
-            .values
-            .toList()),
-      )),
+        GestureDetector(
+          onTap: getChcek,
+          child: Container(
+              child: Table(
+            //表格边框样式
+            border: TableBorder.all(
+              color: Colors.black.withOpacity(0.5),
+            ),
+            children: (list
+                .asMap()
+                .map((index, model) => MapEntry(
+                    index,
+                    TableRow(decoration: BoxDecoration(), children: [
+                      Container(
+                        height: setWidth(60),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        child: Text('${list[index].model}',
+                            style: TextStyle(
+                                fontSize: setSp(28),
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Container(
+                        height: setWidth(60),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${list[index].price}',
+                        ),
+                      ),
+                      Container(
+                        height: setWidth(60),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        child: Text('${list[index].sumNum}'),
+                      ),
+                      Container(
+                        height: setWidth(60),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                            '${DateUtils.DatePaserToYMD(list[index].time)}'),
+                      )
+                    ])))
+                .values
+                .toList()),
+          )),
+        )
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     // BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-
     return Container(child: dataWidget());
+  }
+
+  Widget headWidget() {
+    return Container(
+        child: Table(
+      //表格边框样式
+      border: TableBorder(
+        top: BorderSide(color: Colors.black.withOpacity(0.5)),
+        right: BorderSide(color: Colors.black.withOpacity(0.5)),
+        // bottom: BorderSide(color:Colors.black.withOpacity(0.5) ),
+        left: BorderSide(color: Colors.black.withOpacity(0.5)),
+        horizontalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
+        verticalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
+      ),
+      children: [
+        TableRow(decoration: BoxDecoration(), children: [
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text('类型',
+                style: TextStyle(
+                    fontSize: setSp(28), fontWeight: FontWeight.w500)),
+          ),
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '价格',
+            ),
+          ),
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text('数量'),
+          ),
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text('时间'),
+          )
+        ])
+      ],
+    ));
   }
 
   Widget dataWidget() {
@@ -73,7 +153,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
             // BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
           },
           child: Consumer<BxProvide>(builder: (context, bxProvider, _) {
-            return tabWidget(bxProvider.getBxList);
+            return tabWidget(bxProvider.getResidueDataList);
           }),
         );
         break;
@@ -83,7 +163,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
             // bxProvider = Provider.of<BxProvide>(context, listen: false);
           },
           child: Consumer<XyjProvide>(builder: (context, xyjProvider, _) {
-            return tabWidget(xyjProvider.getXyjList);
+            return tabWidget(xyjProvider.getResidueDataList);
           }),
         );
         break;
@@ -93,7 +173,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
             // bxProvider = Provider.of<BxProvide>(context, listen: false);
           },
           child: Consumer<KtProvide>(builder: (context, ktProvider, _) {
-            return tabWidget(ktProvider.getKtList);
+            return tabWidget(ktProvider.getResidueDataList);
           }),
         );
         break;
@@ -103,7 +183,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
             // bxProvider = providervider.of<BxProvide>(context, listen: false);
           },
           child: Consumer<DsProvide>(builder: (context, dsProvider, _) {
-            return tabWidget(dsProvider.getDsList);
+            return tabWidget(dsProvider.getResidueDataList);
           }),
         );
         break;
@@ -113,7 +193,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
             // bxProvider = Provider.of<BxProvide>(context, listen: false);
           },
           child: Consumer<RqzProvide>(builder: (context, rqzProvider, _) {
-            return tabWidget(rqzProvider.getRqzList);
+            return tabWidget(rqzProvider.getResidueDataList);
           }),
         );
         break;
@@ -123,7 +203,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
             // bxProvider = Provider.of<BxProvide>(context, listen: false);
           },
           child: Consumer<YyjProvide>(builder: (context, yyjProvider, _) {
-            return tabWidget(yyjProvider.getYyjList);
+            return tabWidget(yyjProvider.getResidueDataList);
           }),
         );
         break;
@@ -133,7 +213,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
             // bxProvider = Provider.of<BxProvide>(context, listen: false);
           },
           child: Consumer<RsqProvide>(builder: (context, rsqProvider, _) {
-            return tabWidget(rsqProvider.getRsqList);
+            return tabWidget(rsqProvider.getResidueDataList);
           }),
         );
         break;

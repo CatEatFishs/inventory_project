@@ -145,11 +145,11 @@ class GoodAttributeTable extends BaseProvider {
   Future<List<ResidueGoodModel>> queryResidueAll(Database database,
       String tableName, {String type, String model, String price}) async {
     // String sql="SELECT * FROM $tableName WHERE $_columnIntAndOut='入库' ORDER BY time DESC";
-    String sql = "select model,time,sum(num) FROM $tableName group by model";
+    String sql =
+        "select model,price,time,sum(num) FROM $tableName group by model";
 
     List<Map<String, dynamic>> result = await database.rawQuery(sql);
     List<ResidueGoodModel> newList = List();
-
 
     if (result != null) {
       result.forEach((value) {

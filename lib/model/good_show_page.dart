@@ -5,7 +5,7 @@ import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/screens.dart';
 
 import 'good_show_residue_page.dart';
-
+//商品展示页面
 class GoodShowPage extends StatefulWidget {
   @override
   _GoodShowPageState createState() => _GoodShowPageState();
@@ -34,16 +34,6 @@ class _GoodShowPageState extends State<GoodShowPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StaggeredGridView.countBuilder(crossAxisCount: 4,
-          itemBuilder: (BuildContext context, int index) {
-
-          },
-          staggeredTileBuilder: (int index) => new StaggeredTile.count(
-              2, index == 0 ? 2.5 : 3)),
-    );
-
-/*
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -75,7 +65,6 @@ class _GoodShowPageState extends State<GoodShowPage>
             ),
           )),
     );
-    */
   }
 }
 

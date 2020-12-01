@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
+import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
+import 'package:inventoryproject/provider/ds_provider.dart';
+import 'package:inventoryproject/provider/kt_provider.dart';
+import 'package:inventoryproject/provider/rqz_provider.dart';
+import 'package:inventoryproject/provider/rsq_provider.dart';
+import 'package:inventoryproject/provider/xyj_provider.dart';
+import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/R.dart';

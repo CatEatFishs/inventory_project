@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
+import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 //燃气灶provide
@@ -8,6 +9,7 @@ class RqzProvide extends ChangeNotifier {
   Database database;
   GoodAttributeTable goodAttributeTable;
   List<GoodAttributeTable> rqzDataList = [];
+  List<ResidueGoodModel> residueDataList = [];
 
   init() async {
     debugPrint('创建数据库--RqzProvide');
@@ -46,4 +48,7 @@ class RqzProvide extends ChangeNotifier {
   }
 
   List<GoodAttributeTable> get getRqzList => rqzDataList;
+
+  //查询剩余数据
+  List<ResidueGoodModel> get getResidueDataList => residueDataList;
 }
