@@ -3,6 +3,8 @@ import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/R.dart';
+
 //展示每个分类
 class GoodShowListPage extends StatefulWidget {
   final String goodName;
@@ -13,10 +15,12 @@ class GoodShowListPage extends StatefulWidget {
   _GoodShowListPageState createState() => _GoodShowListPageState();
 }
 
-class _GoodShowListPageState extends State<GoodShowListPage> {
+class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepAliveClientMixin{
   List<GoodAttributeTable> goodList = [];
   BxProvide bxProvider;
-
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -27,11 +31,12 @@ class _GoodShowListPageState extends State<GoodShowListPage> {
   }
 
   Widget tabWidget(List<GoodAttributeTable> list) {
+    list.insert(0, GoodAttributeTable(model: '类型',price: '价格',num: '数量',time: '时间'));
     return Container(
         child: Table(
       //表格边框样式
       border: TableBorder.all(
-        color: Colors.red,
+        color: Colors.black.withOpacity(0.5),
       ),
       children: (list
           .asMap()
@@ -50,6 +55,7 @@ class _GoodShowListPageState extends State<GoodShowListPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(child: dataWidget());
   }
 
@@ -128,4 +134,6 @@ class _GoodShowListPageState extends State<GoodShowListPage> {
     }
     return Container();
   }
+
+
 }

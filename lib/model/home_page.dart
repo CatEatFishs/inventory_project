@@ -22,7 +22,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 1080, height: 1920);
     provide = Provider.of<BxProvide>(context, listen: false);
     return Scaffold(
       bottomNavigationBar: bottomNavigationBarWidget(),
@@ -63,15 +62,12 @@ class _HomePageState extends State<HomePage> {
         break;
     }
 
-
-
-
     return SafeArea(
         child: Container(
       height: setHeight(98.0),
       width: getScreenWidth(),
       color: Colors.white,
-      padding: EdgeInsets.only(left: setWidth(30),right: setWidth(30)),
+      padding: EdgeInsets.only(left: setWidth(30), right: setWidth(30)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -86,9 +82,14 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  goodImage, width: setWidth(40), height: setHeight(40),),
-                Text(' 商品',
-                  style: TextStyle(color: goodColor, fontSize: goodFont),),
+                  goodImage,
+                  width: setWidth(40),
+                  height: setHeight(40),
+                ),
+                Text(
+                  ' 商品',
+                  style: TextStyle(color: goodColor, fontSize: goodFont),
+                ),
               ],
             ),
           ),
@@ -109,9 +110,14 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  recordImage, width: setWidth(40), height: setHeight(40),),
-                Text(' 记录',
-                  style: TextStyle(color: recordColor, fontSize: recordFont),),
+                  recordImage,
+                  width: setWidth(40),
+                  height: setHeight(40),
+                ),
+                Text(
+                  ' 记录',
+                  style: TextStyle(color: recordColor, fontSize: recordFont),
+                ),
               ],
             ),
           ),

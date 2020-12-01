@@ -3,13 +3,14 @@ import 'package:inventoryproject/model/good_show_list_page.dart';
 import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/screens.dart';
 
+import '../utils/screens.dart';
+
 class GoodShowPage extends StatefulWidget {
   @override
   _GoodShowPageState createState() => _GoodShowPageState();
 }
 
-class _GoodShowPageState extends State<GoodShowPage>
-    with SingleTickerProviderStateMixin {
+class _GoodShowPageState extends State<GoodShowPage> with SingleTickerProviderStateMixin{
   List<Tab> myTabs;
   TabController tabController;
 
@@ -18,9 +19,7 @@ class _GoodShowPageState extends State<GoodShowPage>
     super.initState();
 
     myTabs = [
-      new Tab(
-        text: '冰箱',
-      ),
+      new Tab(text: '冰箱',),
       new Tab(text: '洗衣机'),
       new Tab(text: '空调'),
       new Tab(text: '电视'),
@@ -46,18 +45,18 @@ class _GoodShowPageState extends State<GoodShowPage>
                 isScrollable: true,
                 indicatorColor: Colors.amber,
                 labelColor: Colors.black,
-                unselectedLabelColor: R.color_gray_666,
-                labelStyle: TextStyle(fontSize: setSp(32)),
+                unselectedLabelColor: Colors.black,
+                labelStyle: TextStyle(fontSize: setSp(32),fontWeight: FontWeight.w500),
                 unselectedLabelStyle: TextStyle(fontSize: setSp(28)),
                 indicatorSize: TabBarIndicatorSize.label),
+            SizedBox(height: setWidth(10),),
             Expanded(
                 flex: 1,
                 child: TabBarView(
                   controller: tabController,
                   children: myTabs
                       .asMap()
-                      .map((index, model) => MapEntry(
-                          index, GoodShowListPage(goodName: model.text)))
+                      .map((index, model) => MapEntry(index, GoodShowListPage(goodName: model.text)))
                       .values
                       .toList(),
                 ))
