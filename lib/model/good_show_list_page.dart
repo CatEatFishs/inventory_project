@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
-import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
-import 'package:inventoryproject/provider/ds_provider.dart';
-import 'package:inventoryproject/provider/kt_provider.dart';
-import 'package:inventoryproject/provider/rqz_provider.dart';
-import 'package:inventoryproject/provider/rsq_provider.dart';
-import 'package:inventoryproject/provider/xyj_provider.dart';
-import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/R.dart';
 
 //展示每个分类
 class GoodShowListPage extends StatefulWidget {
@@ -20,9 +15,12 @@ class GoodShowListPage extends StatefulWidget {
   _GoodShowListPageState createState() => _GoodShowListPageState();
 }
 
-class _GoodShowListPageState extends State<GoodShowListPage> {
+class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepAliveClientMixin{
   List<GoodAttributeTable> goodList = [];
-
+  BxProvide bxProvider;
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -33,36 +31,31 @@ class _GoodShowListPageState extends State<GoodShowListPage> {
   }
 
   Widget tabWidget(List<GoodAttributeTable> list) {
-    return GestureDetector(
-      onTap: getChcek,
-      child: Container(
-          child: Table(
-            //表格边框样式
-            border: TableBorder.all(
-              color: Colors.red,
-            ),
-            children: (list
-                .asMap()
-                .map((index, model) =>
-                MapEntry(
-                    index,
-                    TableRow(children: [
-                      Text('${list[index].model}'),
-                      Text('${list[index].intAndOut}'),
-                      Text('${list[index].price}'),
-                      Text('${list[index].num}'),
-                      Text('${list[index].time}'),
-                    ])))
-                .values
-                .toList()),
-          )),
-    );
+    list.insert(0, GoodAttributeTable(model: '类型',price: '价格',num: '数量',time: '时间'));
+    return Container(
+        child: Table(
+      //表格边框样式
+      border: TableBorder.all(
+        color: Colors.black.withOpacity(0.5),
+      ),
+      children: (list
+          .asMap()
+          .map((index, model) => MapEntry(
+              index,
+              TableRow(children: [
+                Text('${list[index].model}'),
+                Text('${list[index].price}'),
+                Text('${list[index].num}'),
+                Text('${list[index].time}'),
+              ])))
+          .values
+          .toList()),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    // BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-
+    super.build(context);
     return Container(child: dataWidget());
   }
 

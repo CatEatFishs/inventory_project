@@ -7,5 +7,9 @@ class NavigatorUtils {
       context,
       MaterialPageRoute(builder: (BuildContext context) => routeWidget));
 
+  static pushReplacement(BuildContext context, Widget routeWidget) => Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) => routeWidget));
+
   static pop(BuildContext context) => Navigator.pop(context);
 }
