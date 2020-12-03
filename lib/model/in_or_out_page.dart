@@ -12,6 +12,7 @@ import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
+import 'package:inventoryproject/utils/global_event.dart';
 import 'package:inventoryproject/utils/list_title_utils.dart';
 import 'package:inventoryproject/utils/route_navigator.dart';
 import 'package:inventoryproject/utils/screens.dart';
@@ -50,6 +51,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           ListView(
@@ -108,7 +110,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
                 child: Text('完成'),
               ),
             ),
-          )
+          ),
         ],
       ),
       resizeToAvoidBottomInset: false,
@@ -267,6 +269,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
         break;
     }
 
+    GlobalEvent.eventBus.fire(InAndOutEvent(type: goodTypeTitle));
     NavigatorRoute.pop(context);
   }
 

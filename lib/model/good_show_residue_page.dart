@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
@@ -9,7 +11,9 @@ import 'package:inventoryproject/provider/rsq_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
+import 'package:inventoryproject/utils/global_event.dart';
 import 'package:inventoryproject/utils/screens.dart';
+import 'package:inventoryproject/utils/utils_widget.dart';
 import 'package:provider/provider.dart';
 
 //剩余数量页面
@@ -23,206 +27,200 @@ class GoodShowResidueList extends StatefulWidget {
 }
 
 class _GoodShowResidueListState extends State<GoodShowResidueList> {
-  List<GoodAttributeTable> goodList = [];
+  List<ResidueGoodModel> goodList = [];
+  StreamSubscription<InAndOutEvent> inAndOutEventStreamSubscription;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getChcek();
+    inAndOutEventStreamSubscription =
+        GlobalEvent.eventBus.on<InAndOutEvent>().listen((value) {
+      if (value.type != null &&
+          value.type.isNotEmpty &&
+          value.type == this.widget.goodName) {
+        getCheck();
+      }
     });
     super.initState();
   }
 
-  Widget tabWidget(List<ResidueGoodModel> list) {
+  @override
+  void dispose() {
+    inAndOutEventStreamSubscription.cancel();
+    super.dispose();
+  }
+
+  Widget tabWidget() {
     return Column(
       children: [
         Offstage(
-          offstage: list.length == 0,
+          offstage: goodList.length == 0,
           child: headWidget(),
         ),
-        GestureDetector(
-          onTap: getChcek,
-          child: Container(
-              child: Table(
-            //表格边框样式
-            border: TableBorder.all(
-              color: Colors.black.withOpacity(0.5),
-            ),
-            children: (list
-                .asMap()
-                .map((index, model) => MapEntry(
-                    index,
-                    TableRow(decoration: BoxDecoration(), children: [
-                      Container(
-                        height: setWidth(60),
-                        padding: EdgeInsets.only(left: 5),
-                        alignment: Alignment.centerLeft,
-                        child: Text('${list[index].model}',
-                            style: TextStyle(
-                                fontSize: setSp(28),
-                                fontWeight: FontWeight.w500)),
+        Container(
+            child: Table(
+          //表格边框样式
+          border: TableBorder.all(
+            color: Colors.black.withOpacity(0.5),
+          ),
+          children: (goodList
+              .asMap()
+              .map((index, model) => MapEntry(
+                  index,
+                  TableRow(decoration: BoxDecoration(), children: [
+                    Container(
+                      height: setWidth(60),
+                      padding: EdgeInsets.only(left: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text('${goodList[index].model}',
+                          style: TextStyle(
+                              fontSize: setSp(28),
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    Container(
+                      height: setWidth(60),
+                      padding: EdgeInsets.only(left: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${goodList[index].price}',
                       ),
-                      Container(
-                        height: setWidth(60),
-                        padding: EdgeInsets.only(left: 5),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '${list[index].price}',
-                        ),
-                      ),
-                      Container(
-                        height: setWidth(60),
-                        padding: EdgeInsets.only(left: 5),
-                        alignment: Alignment.centerLeft,
-                        child: Text('${list[index].sumNum}'),
-                      ),
-                      Container(
-                        height: setWidth(60),
-                        padding: EdgeInsets.only(left: 5),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                            '${DateUtils.DatePaserToYMD(list[index].time)}'),
-                      )
-                    ])))
-                .values
-                .toList()),
-          )),
-        )
+                    ),
+                    Container(
+                      height: setWidth(60),
+                      padding: EdgeInsets.only(left: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text('${goodList[index].sumNum}'),
+                    ),
+                    Container(
+                      height: setWidth(60),
+                      padding: EdgeInsets.only(left: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                          '${DateUtils.DatePaserToYMD(goodList[index].time)}'),
+                    )
+                  ])))
+              .values
+              .toList()),
+        ))
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-    return Container(child: dataWidget());
+    return EasyRefresh(
+      firstRefresh: true,
+      firstRefreshWidget: null,
+      // 数据为空时的视图
+      header: UtilsWidget.refreshHeader(),
+      footer: UtilsWidget.refreshFooter(),
+      onRefresh: () async {
+        goodList.clear();
+        getCheck();
+      },
+      onLoad: () async {},
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+                margin: EdgeInsets.only(
+                    left: setWidth(15), right: setWidth(15)),
+                child: dataWidget()),
+          )
+        ],
+      ),
+    );
   }
 
   Widget headWidget() {
     return Container(
         child: Table(
-      //表格边框样式
-      border: TableBorder(
-        top: BorderSide(color: Colors.black.withOpacity(0.5)),
-        right: BorderSide(color: Colors.black.withOpacity(0.5)),
-        // bottom: BorderSide(color:Colors.black.withOpacity(0.5) ),
-        left: BorderSide(color: Colors.black.withOpacity(0.5)),
-        horizontalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
-        verticalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
-      ),
-      children: [
-        TableRow(decoration: BoxDecoration(), children: [
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text('类型',
-                style: TextStyle(
-                    fontSize: setSp(28), fontWeight: FontWeight.w500)),
+          //表格边框样式
+          border: TableBorder(
+            top: BorderSide(color: Colors.black.withOpacity(0.5)),
+            right: BorderSide(color: Colors.black.withOpacity(0.5)),
+            // bottom: BorderSide(color:Colors.black.withOpacity(0.5) ),
+            left: BorderSide(color: Colors.black.withOpacity(0.5)),
+            horizontalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
+            verticalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
           ),
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '价格',
-            ),
-          ),
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text('数量'),
-          ),
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text('时间'),
-          )
-        ])
-      ],
-    ));
+          children: [
+            TableRow(decoration: BoxDecoration(), children: [
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text('类型',
+                    style: TextStyle(
+                        fontSize: setSp(28), fontWeight: FontWeight.w500)),
+              ),
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '价格',
+                ),
+              ),
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text('剩余数量'),
+              ),
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text('时间'),
+              )
+            ])
+          ],
+        ));
   }
 
   Widget dataWidget() {
-    switch (this.widget.goodName) {
-      case '冰箱':
-        return ChangeNotifierProvider(
-          create: (_) {
-            // BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-          },
-          child: Consumer<BxProvide>(builder: (context, bxProvider, _) {
-            return tabWidget(bxProvider.getResidueDataList);
-          }),
-        );
-        break;
-      case '洗衣机':
-        return ChangeNotifierProvider(
-          create: (_) {
-            // bxProvider = Provider.of<BxProvide>(context, listen: false);
-          },
-          child: Consumer<XyjProvide>(builder: (context, xyjProvider, _) {
-            return tabWidget(xyjProvider.getResidueDataList);
-          }),
-        );
-        break;
-      case '空调':
-        return ChangeNotifierProvider(
-          create: (_) {
-            // bxProvider = Provider.of<BxProvide>(context, listen: false);
-          },
-          child: Consumer<KtProvide>(builder: (context, ktProvider, _) {
-            return tabWidget(ktProvider.getResidueDataList);
-          }),
-        );
-        break;
-      case '电视':
-        return ChangeNotifierProvider(
-          create: (_) {
-            // bxProvider = providervider.of<BxProvide>(context, listen: false);
-          },
-          child: Consumer<DsProvide>(builder: (context, dsProvider, _) {
-            return tabWidget(dsProvider.getResidueDataList);
-          }),
-        );
-        break;
-      case '燃气灶':
-        return ChangeNotifierProvider(
-          create: (_) {
-            // bxProvider = Provider.of<BxProvide>(context, listen: false);
-          },
-          child: Consumer<RqzProvide>(builder: (context, rqzProvider, _) {
-            return tabWidget(rqzProvider.getResidueDataList);
-          }),
-        );
-        break;
-      case '抽烟机':
-        return ChangeNotifierProvider(
-          create: (_) {
-            // bxProvider = Provider.of<BxProvide>(context, listen: false);
-          },
-          child: Consumer<YyjProvide>(builder: (context, yyjProvider, _) {
-            return tabWidget(yyjProvider.getResidueDataList);
-          }),
-        );
-        break;
-      case '热水器':
-        return ChangeNotifierProvider(
-          create: (_) {
-            // bxProvider = Provider.of<BxProvide>(context, listen: false);
-          },
-          child: Consumer<RsqProvide>(builder: (context, rsqProvider, _) {
-            return tabWidget(rsqProvider.getResidueDataList);
-          }),
-        );
-        break;
-    }
-    return Container();
+    return tabWidget();
   }
 
-  void getChcek() async {
-    BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-    List<ResidueGoodModel> goodLists = await bxProvider.queryResidueAll();
+  void getCheck() async {
+    switch (this.widget.goodName) {
+      case '冰箱':
+        BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
+        goodList = await bxProvider.queryResidueAll();
+        break;
+      case '洗衣机':
+        XyjProvide xyjProvider = Provider.of<XyjProvide>(
+            context, listen: false);
+        goodList = await xyjProvider.queryResidueAll();
+        break;
+      case '空调':
+        KtProvide ktProvider = Provider.of<KtProvide>(context, listen: false);
+        goodList = await ktProvider.queryResidueAll();
+        break;
+      case '电视':
+        DsProvide dsProvider = Provider.of<DsProvide>(context, listen: false);
+        goodList = await dsProvider.queryResidueAll();
+        break;
+      case '燃气灶':
+        RqzProvide rqzProvider = Provider.of<RqzProvide>(
+            context, listen: false);
+        goodList = await rqzProvider.queryResidueAll();
+        break;
+      case '抽烟机':
+        YyjProvide yyjProvider = Provider.of<YyjProvide>(
+            context, listen: false);
+        goodList = await yyjProvider.queryResidueAll();
+        break;
+      case '热水器':
+        RsqProvide rsqProvider = Provider.of<RsqProvide>(
+            context, listen: false);
+        goodList = await rsqProvider.queryResidueAll();
+        break;
+    }
+    if (mounted) {
+      setState(() {
+
+      });
+    }
   }
 }

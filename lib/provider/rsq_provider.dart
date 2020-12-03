@@ -16,12 +16,7 @@ class RsqProvide extends ChangeNotifier {
     goodAttributeTable = GoodAttributeTable();
     goodAttributeTable.setTabName = tableName;
     database = await goodAttributeTable.getDataBase();
-    queryAll();
-    if (database == null) {
-      debugPrint('数据库空');
-    } else {
-      debugPrint('数据库不空');
-    }
+    queryResidueAll();
   }
 
   //插入数据
@@ -41,6 +36,13 @@ class RsqProvide extends ChangeNotifier {
     debugPrint('rsqDataList length-${rsqDataList.length}');
     notifyListeners();
     return rsqDataList;
+  }
+
+  ///查询表中剩余物品的数据
+  Future<List<ResidueGoodModel>> queryResidueAll() async {
+    residueDataList =
+        await goodAttributeTable.queryResidueAll(database, tableName);
+    return residueDataList;
   }
 
   bool isTableExit() {

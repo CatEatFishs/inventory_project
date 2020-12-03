@@ -12,16 +12,10 @@ class YyjProvide extends ChangeNotifier {
   List<ResidueGoodModel> residueDataList = [];
 
   init() async {
-    debugPrint('创建数据库--yyjProvide');
     goodAttributeTable = GoodAttributeTable();
     goodAttributeTable.setTabName = tableName;
     database = await goodAttributeTable.getDataBase();
     queryAll();
-    if (database == null) {
-      debugPrint('数据库空');
-    } else {
-      debugPrint('数据库不空');
-    }
   }
 
 //插入数据
@@ -41,6 +35,13 @@ class YyjProvide extends ChangeNotifier {
     debugPrint('yyjDataList length-${yyjDataList.length}');
     notifyListeners();
     return yyjDataList;
+  }
+
+  ///查询表中剩余物品的数据
+  Future<List<ResidueGoodModel>> queryResidueAll() async {
+    residueDataList =
+        await goodAttributeTable.queryResidueAll(database, tableName);
+    return residueDataList;
   }
 
   bool isTableExit() {

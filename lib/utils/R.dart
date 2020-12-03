@@ -5,4 +5,5 @@ class R {
   static const Color color_gray_666 = Color(0xFF666666);
   static const Color color_gray_8a8a = Color(0xFF8a8a8a);
   static const Color color_blue_108EE9 = Color(0xFF108EE9);
+  static const Color color_green_3CB71D = Color(0xFF3CB71D);
 }
