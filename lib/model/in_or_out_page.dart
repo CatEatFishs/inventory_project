@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
@@ -14,10 +13,11 @@ import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
 import 'package:inventoryproject/utils/global_event.dart';
 import 'package:inventoryproject/utils/list_title_utils.dart';
-import 'package:inventoryproject/utils/route_navigator.dart';
 import 'package:inventoryproject/utils/screens.dart';
 import 'package:inventoryproject/utils/toast_utils.dart';
 import 'package:inventoryproject/utils/util_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:inventoryproject/utils/utils.dart';
 
 //出入库页面
 class InOrOutPage extends StatefulWidget {
@@ -94,22 +94,31 @@ class _InOrOutPageState extends State<InOrOutPage> {
                   leadingStr: '出入库时间：',
                   title: goodTime,
                   function: _showDatePicker),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(R.color_gray_8a8a),
+              Divider(
+                color: R.color_gray_666,
+                height: setWidth(1),
               ),
-              onPressed: pressedFunction,
-              child: Container(
+              Container(
                 width: AdaptUtils.screenW(),
-                height: setWidth(45),
-                alignment: Alignment.center,
-                child: Text('完成'),
-              ),
-            ),
+                padding: EdgeInsets.only(
+                    left: setWidth(30),
+                    right: setWidth(30),
+                    top: setWidth(100)),
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        R.color_gray_8a8a.withOpacity(0.5)),
+                  ),
+                  onPressed: pressedFunction,
+                  child: Container(
+                    width: AdaptUtils.screenW(),
+                    height: setWidth(45),
+                    alignment: Alignment.center,
+                    child: Text('完成'),
+                  ),
+                ),
+              )
+            ],
           ),
         ],
       ),
@@ -213,7 +222,6 @@ class _InOrOutPageState extends State<InOrOutPage> {
     if (xhController.text.isEmpty) return showToast('请填写型号！');
     if (priceController.text.isEmpty) return showToast('请填写价格！');
     if (numController.text.isEmpty) return showToast('请填写数量！');
-    // {this.intAndOut, this.type, this.model, this.price, this.num, this.time});
     table = new GoodAttributeTable(
         intAndOut: inOrOutTitle,
         type: goodTypeTitle,
@@ -224,6 +232,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
             : '${numController.text.trim()}',
         time: DateUtils.DatePaserToMils(goodTime),
         systemTime: DateTime.now().toString());
+
     setType();
   }
 

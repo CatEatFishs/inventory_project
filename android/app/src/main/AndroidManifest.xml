@@ -12,8 +12,8 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="inventoryproject"
-        android:icon="@mipmap/ic_launcher">
+        android:label="库存工具"
+        android:icon="@mipmap/logo_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -38,9 +38,6 @@
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
               android:resource="@drawable/launch_background"
               />
-            <meta-data
-                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
-                android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

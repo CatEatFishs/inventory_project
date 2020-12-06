@@ -10,6 +10,7 @@ import 'package:inventoryproject/utils/screens.dart';
 import 'package:provider/provider.dart';
 import '../utils/screens.dart';
 import 'good_show_page.dart';
+import 'page_data_center.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: bottomNavigationBarWidget(),
       backgroundColor: Colors.white,
       body: IndexedStack(
-        children: <Widget>[GoodShowPage(), RecordPage()],
+        children: <Widget>[GoodShowPage(), DataCenter()],
         index: homeTabIndex,
       ),
     );
@@ -37,18 +38,22 @@ class _HomePageState extends State<HomePage> {
     String goodImage;
     double goodFont;
     Color goodColor;
+
+    String inOutImage = 'images/icons/in_out_gray_icon.png';
+
     String recordImage;
     double recordFont;
     Color recordColor;
+
     switch (homeTabIndex) {
       case 0:
         goodImage = 'images/icons/home_red_icon.png';
         goodFont = setSp(26);
         goodColor = R.color_red_d81e;
 
-        recordImage = 'images/icons/record_gray_icon.png';
+        recordImage = 'images/icons/record_black_icon.png';
         recordFont = setSp(24);
-        recordColor = R.color_gray_8a8a;
+        recordColor = Colors.black;
 
         break;
       case 1:
@@ -56,9 +61,9 @@ class _HomePageState extends State<HomePage> {
         goodFont = setSp(24);
         goodColor = Colors.black;
 
-        recordImage = 'images/icons/record_black_icon.png';
+        recordImage = 'images/icons/record_red_icon.png';
         recordFont = setSp(26);
-        recordColor = Colors.black;
+        recordColor = R.color_red_d81e;
         break;
     }
 
@@ -97,7 +102,21 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               NavigatorRoute.push(context, InOrOutPage(), pageName: '');
             },
-            child: Text('出入库'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  inOutImage,
+                  width: setWidth(40),
+                  height: setHeight(40),
+                ),
+                Text(
+                  ' 出入库',
+                  style: TextStyle(color: Colors.black, fontSize: setSp(28)),
+                ),
+              ],
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -115,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                   height: setHeight(40),
                 ),
                 Text(
-                  ' 记录',
+                  ' 数据中心',
                   style: TextStyle(color: recordColor, fontSize: recordFont),
                 ),
               ],

@@ -8,8 +8,15 @@ class BxProvide extends ChangeNotifier {
   final String tableName = 'BxDateBaseTable';
   Database database;
   GoodAttributeTable goodAttributeTable;
+
+  //所有数据
   List<GoodAttributeTable> bxDataList = [];
+
+  ///剩余数量
   List<ResidueGoodModel> residueDataList = [];
+
+  //按条件查询
+  List<GoodAttributeTable> conditionDataList = [];
 
   init() async {
     goodAttributeTable = GoodAttributeTable();
@@ -42,6 +49,18 @@ class BxProvide extends ChangeNotifier {
     residueDataList =
         await goodAttributeTable.queryResidueAll(database, tableName);
     return residueDataList;
+  }
+
+  ///按条件查询
+  Future<List<GoodAttributeTable>> queryConditionData(
+      {String inAndOut, String model, String startTime, String endTime}) async {
+    conditionDataList = await goodAttributeTable.queryConditionData(
+        database, tableName,
+        inAndOut: inAndOut,
+        model: model,
+        startTime: startTime,
+        endTime: endTime);
+    return conditionDataList;
   }
 
   bool isTableExit() {

@@ -9,25 +9,12 @@ import 'package:inventoryproject/provider/rsq_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:provider/provider.dart';
-
-import '../utils/R.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:inventoryproject/db/good_attribute_table.dart';
-import 'package:inventoryproject/model/residue_good_model.dart';
-import 'package:inventoryproject/provider/bx_provider.dart';
-import 'package:inventoryproject/provider/ds_provider.dart';
-import 'package:inventoryproject/provider/kt_provider.dart';
-import 'package:inventoryproject/provider/rqz_provider.dart';
-import 'package:inventoryproject/provider/rsq_provider.dart';
-import 'package:inventoryproject/provider/xyj_provider.dart';
-import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
 import 'package:inventoryproject/utils/global_event.dart';
 import 'package:inventoryproject/utils/screens.dart';
 import 'package:inventoryproject/utils/utils_widget.dart';
-import 'package:provider/provider.dart';
 
 //展示每个分类
 class GoodShowListPage extends StatefulWidget {
@@ -74,6 +61,10 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
         ),
         Container(
             child: Table(
+          columnWidths: {
+            //列宽
+            4: FixedColumnWidth(setWidth(200)),
+          },
           //表格边框样式
           border: TableBorder.all(
             color: Colors.black.withOpacity(0.5),
@@ -85,46 +76,46 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
                   TableRow(decoration: BoxDecoration(), children: [
                     Container(
                       height: setWidth(60),
-                      padding: EdgeInsets.only(left: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text('${goodList[index].intAndOut}',
-                          style: TextStyle(
-                              fontSize: setSp(28),
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    Container(
-                      height: setWidth(60),
-                      padding: EdgeInsets.only(left: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text('${goodList[index].model}',
-                          style: TextStyle(
-                              fontSize: setSp(28),
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    Container(
-                      height: setWidth(60),
-                      padding: EdgeInsets.only(left: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${goodList[index].price}',
-                      ),
-                    ),
-                    Container(
-                      height: setWidth(60),
-                      padding: EdgeInsets.only(left: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text('${goodList[index].num}'),
-                    ),
-                    Container(
-                      height: setWidth(60),
-                      padding: EdgeInsets.only(left: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                          '${DateUtils.DatePaserToYMD(goodList[index].time)}'),
-                    )
-                  ])))
-              .values
-              .toList()),
+                          padding: EdgeInsets.only(left: 5),
+                          alignment: Alignment.centerLeft,
+                          child: Text('${goodList[index].intAndOut}',
+                              style: TextStyle(
+                                  fontSize: setSp(28),
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        Container(
+                          height: setWidth(60),
+                          padding: EdgeInsets.only(left: 5),
+                          alignment: Alignment.centerLeft,
+                          child: Text('${goodList[index].model}',
+                              style: TextStyle(
+                                  fontSize: setSp(28),
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        Container(
+                          height: setWidth(60),
+                          padding: EdgeInsets.only(left: 5),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '${goodList[index].price}',
+                          ),
+                        ),
+                        Container(
+                          height: setWidth(60),
+                          padding: EdgeInsets.only(left: 5),
+                          alignment: Alignment.centerLeft,
+                          child: Text('${goodList[index].num}'),
+                        ),
+                        Container(
+                          height: setWidth(60),
+                          padding: EdgeInsets.only(left: 5),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                              '${DateUtils.DatePaserToYMD(goodList[index].time)}'),
+                        )
+                      ])))
+                  .values
+                  .toList()),
         ))
       ],
     );
@@ -159,55 +150,59 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
   Widget headWidget() {
     return Container(
         child: Table(
-      //表格边框样式
-      border: TableBorder(
-        top: BorderSide(color: Colors.black.withOpacity(0.5)),
-        right: BorderSide(color: Colors.black.withOpacity(0.5)),
-        // bottom: BorderSide(color:Colors.black.withOpacity(0.5) ),
-        left: BorderSide(color: Colors.black.withOpacity(0.5)),
-        horizontalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
-        verticalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
-      ),
-      children: [
-        TableRow(decoration: BoxDecoration(), children: [
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text('出入库',
-                style: TextStyle(
-                    fontSize: setSp(28), fontWeight: FontWeight.w500)),
+          columnWidths: {
+            //列宽
+            4: FixedColumnWidth(setWidth(200)),
+          },
+          //表格边框样式
+          border: TableBorder(
+            top: BorderSide(color: Colors.black.withOpacity(0.5)),
+            right: BorderSide(color: Colors.black.withOpacity(0.5)),
+            // bottom: BorderSide(color:Colors.black.withOpacity(0.5) ),
+            left: BorderSide(color: Colors.black.withOpacity(0.5)),
+            horizontalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
+            verticalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
           ),
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text('类型',
-                style: TextStyle(
-                    fontSize: setSp(28), fontWeight: FontWeight.w500)),
-          ),
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '价格',
-            ),
-          ),
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text('数量'),
-          ),
-          Container(
-            height: setWidth(60),
-            padding: EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            child: Text('时间'),
-          )
-        ])
-      ],
+          children: [
+            TableRow(decoration: BoxDecoration(), children: [
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text('出入库',
+                    style: TextStyle(
+                        fontSize: setSp(28), fontWeight: FontWeight.w500)),
+              ),
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text('类型',
+                    style: TextStyle(
+                        fontSize: setSp(28), fontWeight: FontWeight.w500)),
+              ),
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '价格',
+                ),
+              ),
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text('数量'),
+              ),
+              Container(
+                height: setWidth(60),
+                padding: EdgeInsets.only(left: 5),
+                alignment: Alignment.centerLeft,
+                child: Text('时间'),
+              )
+            ])
+          ],
     ));
   }
 

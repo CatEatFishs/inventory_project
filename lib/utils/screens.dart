@@ -54,12 +54,16 @@ class AdaptUtils {
     return _screenHeight;
   }
 }
-double getScreenWidth()=>AdaptUtils.screenW();
 
-double getScreenHeight()=>AdaptUtils.screenH();
+double getScreenWidth() => AdaptUtils.screenW();
 
-double setWidth(double size) =>AdaptUtils.pxW(size);
+double getScreenHeight() => AdaptUtils.screenH();
 
-double setHeight(double size) =>AdaptUtils.pxH(size);
+double setWidth(double size) => AdaptUtils.pxW(size);
 
-double setSp(double size) =>AdaptUtils.pxF(size);
+double setHeight(double size) => AdaptUtils.pxH(size);
+
+double setSp(double size) => AdaptUtils.pxF(size);
+
+double getDoubleUnitWidth = (getScreenWidth() - setWidth(60)) / 9 * 2;
+double getUnitWidth = (getScreenWidth() - setWidth(60)) / 9;

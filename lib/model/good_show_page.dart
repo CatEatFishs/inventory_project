@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:inventoryproject/model/good_show_list_page.dart';
 import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/screens.dart';
 

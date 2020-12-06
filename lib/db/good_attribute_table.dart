@@ -1,6 +1,4 @@
 //商品属性
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/db_base_provider.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
@@ -163,5 +161,33 @@ class GoodAttributeTable extends BaseProvider {
     return newList;
   }
 
+  Future<List<GoodAttributeTable>> queryConditionData(
+      Database database, String tableName,
+      {String inAndOut, String model, String startTime, String endTime}) async {
+    String sql;
+    debugPrint('inAndOut----$inAndOut');
 
+    if (inAndOut == '不限' || inAndOut == '请选择') {
+      sql =
+          "SELECT * FROM $tableName WHERE  $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime <= '$endTime' ORDER BY time ";
+    } else {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '$inAndOut' and $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime<= '$endTime' ORDER BY time ";
+    }
+
+    debugPrint('sql语句----$sql');
+    List<Map<String, dynamic>> result = await database.rawQuery(sql);
+    List<GoodAttributeTable> newList = List();
+
+    if (result != null) {
+      result.forEach((value) {
+        newList.add(GoodAttributeTable.fromMap(value));
+      });
+    }
+    for (int i = 0; i < newList.length; i++) {
+      debugPrint(newList[i].model);
+    }
+
+    return newList;
+  }
 }
