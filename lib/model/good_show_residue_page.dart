@@ -26,7 +26,10 @@ class GoodShowResidueList extends StatefulWidget {
   _GoodShowResidueListState createState() => _GoodShowResidueListState();
 }
 
-class _GoodShowResidueListState extends State<GoodShowResidueList> {
+class _GoodShowResidueListState extends State<GoodShowResidueList> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   List<ResidueGoodModel> goodList = [];
   StreamSubscription<InAndOutEvent> inAndOutEventStreamSubscription;
 
@@ -107,6 +110,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return EasyRefresh(
       firstRefresh: true,
       firstRefreshWidget: null,
