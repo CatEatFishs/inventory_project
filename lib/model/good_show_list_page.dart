@@ -306,18 +306,15 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
         goodList = await dsProvider.queryAll();
         break;
       case '燃气灶':
-        rqzProvider =
-            Provider.of<RqzProvide>(context, listen: false);
+        rqzProvider = Provider.of<RqzProvide>(context, listen: false);
         goodList = await rqzProvider.queryAll();
         break;
-      case '抽烟机':
-        yyjProvider =
-            Provider.of<YyjProvide>(context, listen: false);
+      case '油烟机':
+        yyjProvider = Provider.of<YyjProvide>(context, listen: false);
         goodList = await yyjProvider.queryAll();
         break;
       case '热水器':
-        rsqProvider =
-            Provider.of<RsqProvide>(context, listen: false);
+        rsqProvider = Provider.of<RsqProvide>(context, listen: false);
         goodList = await rsqProvider.queryAll();
         break;
     }
@@ -343,13 +340,13 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
         result= await dsProvider.queryDeleteIdData(goodList[index].id);
         break;
       case '燃气灶':
-        result= await rqzProvider.queryDeleteIdData(goodList[index].id);
+        result = await rqzProvider.queryDeleteIdData(goodList[index].id);
         break;
-      case '抽烟机':
-        result= await yyjProvider.queryDeleteIdData(goodList[index].id);
+      case '油烟机':
+        result = await yyjProvider.queryDeleteIdData(goodList[index].id);
         break;
       case '热水器':
-        result= await rsqProvider.queryDeleteIdData(goodList[index].id);
+        result = await rsqProvider.queryDeleteIdData(goodList[index].id);
         break;
     }
     if(result==1){

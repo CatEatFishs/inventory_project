@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
+import 'package:inventoryproject/provider/default_provider.dart';
 import 'package:inventoryproject/provider/ds_provider.dart';
 import 'package:inventoryproject/provider/kt_provider.dart';
 import 'package:inventoryproject/provider/providers.dart';
@@ -18,6 +19,8 @@ import 'package:inventoryproject/utils/toast_utils.dart';
 import 'package:inventoryproject/utils/util_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:inventoryproject/utils/utils.dart';
+
+import 'residue_good_model.dart';
 
 //出入库页面
 class InOrOutPage extends StatefulWidget {
@@ -236,43 +239,86 @@ class _InOrOutPageState extends State<InOrOutPage> {
     setType();
   }
 
+  List<ResidueGoodModel> list;
 
   //插入数据库
   setType() async {
     switch (goodTypeTitle) {
       case '冰箱':
         BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
+        if (isInAndOut()) {
+          list = bxProvider.getResidueDataList;
+          if (!isResidueGood()) {
+            return showToast('出库数量不能大于库存数');
+          }
+        }
         await bxProvider.insertData(table);
         await bxProvider.queryAll();
         break;
       case '洗衣机':
-        XyjProvide xyjProvider = Provider.of<XyjProvide>(
-            context, listen: false);
+        XyjProvide xyjProvider =
+            Provider.of<XyjProvide>(context, listen: false);
+        if (isInAndOut()) {
+          list = xyjProvider.getResidueDataList;
+          if (!isResidueGood()) {
+            return showToast('出库数量不能大于库存数');
+          }
+        }
         await xyjProvider.insertData(table);
         await xyjProvider.queryAll();
         break;
       case '空调':
         KtProvide ktProvide = Provider.of<KtProvide>(context, listen: false);
+        if (isInAndOut()) {
+          list = ktProvide.getResidueDataList;
+          if (!isResidueGood()) {
+            return showToast('出库数量不能大于库存数');
+          }
+        }
         await ktProvide.insertData(table);
         await ktProvide.queryAll();
         break;
       case '电视':
         DsProvide dsProvider = Provider.of<DsProvide>(context, listen: false);
+        if (isInAndOut()) {
+          list = dsProvider.getResidueDataList;
+          if (!isResidueGood()) {
+            return showToast('出库数量不能大于库存数');
+          }
+        }
         await dsProvider.insertData(table);
         await dsProvider.queryAll();
         break;
       case '燃气灶':
         RqzProvide rqzProvide = Provider.of<RqzProvide>(context, listen: false);
+        if (isInAndOut()) {
+          list = rqzProvide.getResidueDataList;
+          if (!isResidueGood()) {
+            return showToast('出库数量不能大于库存数');
+          }
+        }
         await rqzProvide.insertData(table);
         await rqzProvide.queryAll();
         break;
       case '油烟机':
         YyjProvide yyjProvide = Provider.of<YyjProvide>(context, listen: false);
+        if (isInAndOut()) {
+          list = yyjProvide.getResidueDataList;
+          if (!isResidueGood()) {
+            return showToast('出库数量不能大于库存数');
+          }
+        }
         await yyjProvide.insertData(table);
         await yyjProvide.queryAll();
         break;
       case '热水器':
         RsqProvide rsqProvide = Provider.of<RsqProvide>(context, listen: false);
+        if (isInAndOut()) {
+          list = rsqProvide.getResidueDataList;
+          if (!isResidueGood()) {
+            return showToast('出库数量不能大于库存数');
+          }
+        }
         await rsqProvide.insertData(table);
         await rsqProvide.queryAll();
         break;
@@ -285,5 +331,24 @@ class _InOrOutPageState extends State<InOrOutPage> {
 
   pressedFunction() {
     checkParams();
+  }
+
+  //出库时 是否够数量
+  bool isResidueGood() {
+    String model = xhController.text.trim();
+    String num = numController.text.trim();
+    if (list != null) {
+      list.forEach((element) {
+        if (element.model == model && element.sumNum >= int.parse(num)) {
+          return true;
+        }
+      });
+    }
+    return false;
+  }
+
+  //出入库  入库false 出库 true
+  bool isInAndOut() {
+    return inOrOutTitle == '出库';
   }
 }

@@ -206,18 +206,18 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
         goodList = await dsProvider.queryResidueAll();
         break;
       case '燃气灶':
-        RqzProvide rqzProvider = Provider.of<RqzProvide>(
-            context, listen: false);
+        RqzProvide rqzProvider =
+            Provider.of<RqzProvide>(context, listen: false);
         goodList = await rqzProvider.queryResidueAll();
         break;
-      case '抽烟机':
-        YyjProvide yyjProvider = Provider.of<YyjProvide>(
-            context, listen: false);
+      case '油烟机':
+        YyjProvide yyjProvider =
+            Provider.of<YyjProvide>(context, listen: false);
         goodList = await yyjProvider.queryResidueAll();
         break;
       case '热水器':
-        RsqProvide rsqProvider = Provider.of<RsqProvide>(
-            context, listen: false);
+        RsqProvide rsqProvider =
+            Provider.of<RsqProvide>(context, listen: false);
         goodList = await rsqProvider.queryResidueAll();
         break;
     }

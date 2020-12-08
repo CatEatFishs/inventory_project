@@ -3,6 +3,8 @@ import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'default_provider.dart';
+
 //冰箱provide
 class BxProvide extends ChangeNotifier {
   final String tableName = 'BxDateBaseTable';
