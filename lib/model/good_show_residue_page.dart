@@ -68,7 +68,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
                   index,
                   TableRow(decoration: BoxDecoration(), children: [
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text('${goodList[index].model}',
@@ -77,7 +77,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
                               fontWeight: FontWeight.w500)),
                     ),
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -85,13 +85,13 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> {
                       ),
                     ),
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text('${goodList[index].sumNum}'),
                     ),
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(

@@ -63,6 +63,11 @@ class BxProvide extends ChangeNotifier {
     return conditionDataList;
   }
 
+  ///按id删除某一条数据
+  Future<int> queryDeleteIdData(int id)async{
+    return await goodAttributeTable.queryDeleteIdData(database, tableName,id);
+  }
+
   bool isTableExit() {
     return GoodAttributeTable().isTableExits;
   }

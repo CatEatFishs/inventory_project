@@ -10,7 +10,8 @@ class XyjProvide extends ChangeNotifier {
   GoodAttributeTable goodAttributeTable;
   List<GoodAttributeTable> xyjDataList = [];
   List<ResidueGoodModel> residueDataList = [];
-
+  //按条件查询
+  List<GoodAttributeTable> conditionDataList = [];
   init() async {
     goodAttributeTable = GoodAttributeTable();
     goodAttributeTable.setTabName = tableName;
@@ -41,6 +42,23 @@ class XyjProvide extends ChangeNotifier {
     residueDataList =
         await goodAttributeTable.queryResidueAll(database, tableName);
     return residueDataList;
+  }
+
+  ///按条件查询
+  Future<List<GoodAttributeTable>> queryConditionData(
+      {String inAndOut, String model, String startTime, String endTime}) async {
+    conditionDataList = await goodAttributeTable.queryConditionData(
+        database, tableName,
+        inAndOut: inAndOut,
+        model: model,
+        startTime: startTime,
+        endTime: endTime);
+    return conditionDataList;
+  }
+
+  ///按id删除某一条数据
+  Future<int> queryDeleteIdData(int id)async{
+    return await goodAttributeTable.queryDeleteIdData(database, tableName,id);
   }
 
   bool isTableExit() {

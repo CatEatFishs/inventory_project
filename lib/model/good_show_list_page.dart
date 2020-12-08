@@ -8,6 +8,8 @@ import 'package:inventoryproject/provider/rqz_provider.dart';
 import 'package:inventoryproject/provider/rsq_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
+import 'package:inventoryproject/utils/dialog_utils.dart';
+import 'package:inventoryproject/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -32,7 +34,13 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
 
   List<GoodAttributeTable> goodList = [];
   StreamSubscription<InAndOutEvent> inAndOutEventStreamSubscription;
-
+  BxProvide bxProvider;
+  XyjProvide xyjProvider;
+  KtProvide ktProvider;
+  DsProvide dsProvider;
+  RqzProvide rqzProvider;
+  YyjProvide yyjProvider;
+  RsqProvide rsqProvider;
   @override
   void initState() {
     inAndOutEventStreamSubscription =
@@ -73,46 +81,91 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
               .asMap()
               .map((index, model) => MapEntry(
                   index,
-                  TableRow(decoration: BoxDecoration(), children: [
-                    Container(
-                      height: setWidth(60),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text('${goodList[index].intAndOut}',
-                              style: TextStyle(
-                                  fontSize: setSp(28),
-                                  fontWeight: FontWeight.w500)),
+                  TableRow(children: [
+                    GestureDetector(
+                      onLongPress: (){
+                        setState(() {
+                          goodList[index].isSelect=true;
+                        });
+                        showDialogs(index);
+                      },
+                      child: Container(
+                        height: setWidth(90),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        color: goodList[index].isSelect?Colors.black.withOpacity(0.3):Colors.white,
+                        child: Text('${goodList[index].intAndOut}',
+                            style: TextStyle(
+                                fontSize: setSp(28),
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ),
+                    GestureDetector(
+                      onLongPress: (){
+                        setState(() {
+                          goodList[index].isSelect=true;
+                        });
+                        showDialogs(index);
+                      },
+                      child: Container(
+                        height: setWidth(90),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        color: goodList[index].isSelect?Colors.black.withOpacity(0.3):Colors.white,
+                        child: Text('${goodList[index].model}',
+                            style: TextStyle(
+                                fontSize: setSp(28),
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ),
+                    GestureDetector(
+                      onLongPress: (){
+                        setState(() {
+                          goodList[index].isSelect=true;
+                        });
+                        showDialogs(index);
+                      },
+                      child: Container(
+                        height: setWidth(90),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        color: goodList[index].isSelect?Colors.black.withOpacity(0.3):Colors.white,
+                        child: Text(
+                          '${goodList[index].price}',
                         ),
-                        Container(
-                          height: setWidth(60),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text('${goodList[index].model}',
-                              style: TextStyle(
-                                  fontSize: setSp(28),
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        Container(
-                          height: setWidth(60),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '${goodList[index].price}',
-                          ),
-                        ),
-                        Container(
-                          height: setWidth(60),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text('${goodList[index].num}'),
-                        ),
-                        Container(
-                          height: setWidth(60),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              '${DateUtils.DatePaserToYMD(goodList[index].time)}'),
-                        )
+                      ),
+                    ),
+                    GestureDetector(
+                      onLongPress: (){
+                        setState(() {
+                          goodList[index].isSelect=true;
+                        });
+                        showDialogs(index);
+                      },
+                      child: Container(
+                        height: setWidth(90),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        color: goodList[index].isSelect?Colors.black.withOpacity(0.3):Colors.white,
+                        child: Text('${goodList[index].num}'),
+                      ),
+                    ),
+                    GestureDetector(
+                      onLongPress: (){
+                        setState(() {
+                          goodList[index].isSelect=true;
+                        });
+                        showDialogs(index);
+                      },
+                      child: Container(
+                        height: setWidth(90),
+                        padding: EdgeInsets.only(left: 5),
+                        alignment: Alignment.centerLeft,
+                        color: goodList[index].isSelect?Colors.black.withOpacity(0.3):Colors.white,
+                        child: Text(
+                            '${DateUtils.DatePaserToYMD(goodList[index].time)}'),
+                      ),
+                    )
                       ])))
                   .values
                   .toList()),
@@ -123,6 +176,7 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return EasyRefresh(
       firstRefresh: true,
       firstRefreshWidget: null,
@@ -210,43 +264,102 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
     return tabWidget();
   }
 
+  showDialogs(int index) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return InfoCustomDialog(
+          confirmCallback: (){
+            debugPrint('确定');
+            deleteData(index);
+            Navigator.pop(context);
+          },
+          dismissCallback: (){
+            Navigator.pop(context);
+            setState(() {
+              goodList[index].isSelect=false;
+            });
+          },
+        );
+      },
+    );
+  }
+
   void getCheck() async {
     switch (this.widget.goodName) {
       case '冰箱':
-        BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
+        bxProvider = Provider.of<BxProvide>(context, listen: false);
         goodList = await bxProvider.queryAll();
         break;
       case '洗衣机':
-        XyjProvide xyjProvider =
+        xyjProvider =
             Provider.of<XyjProvide>(context, listen: false);
         goodList = await xyjProvider.queryAll();
         break;
       case '空调':
-        KtProvide ktProvider = Provider.of<KtProvide>(context, listen: false);
+        ktProvider = Provider.of<KtProvide>(context, listen: false);
         goodList = await ktProvider.queryAll();
         break;
       case '电视':
-        DsProvide dsProvider = Provider.of<DsProvide>(context, listen: false);
+        dsProvider = Provider.of<DsProvide>(context, listen: false);
         goodList = await dsProvider.queryAll();
         break;
       case '燃气灶':
-        RqzProvide rqzProvider =
+        rqzProvider =
             Provider.of<RqzProvide>(context, listen: false);
         goodList = await rqzProvider.queryAll();
         break;
       case '抽烟机':
-        YyjProvide yyjProvider =
+        yyjProvider =
             Provider.of<YyjProvide>(context, listen: false);
         goodList = await yyjProvider.queryAll();
         break;
       case '热水器':
-        RsqProvide rsqProvider =
+        rsqProvider =
             Provider.of<RsqProvide>(context, listen: false);
         goodList = await rsqProvider.queryAll();
         break;
     }
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  //删除数据
+  void deleteData(int index)async{
+    int result=0;
+    switch (this.widget.goodName) {
+      case '冰箱':
+        result= await bxProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '洗衣机':
+        result= await xyjProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '空调':
+        result= await ktProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '电视':
+        result= await dsProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '燃气灶':
+        result= await rqzProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '抽烟机':
+        result= await yyjProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '热水器':
+        result= await rsqProvider.queryDeleteIdData(goodList[index].id);
+        break;
+    }
+    if(result==1){
+      goodList.removeAt(index);
+      showToast('记录删除成功！');
+      GlobalEvent.eventBus.fire(InAndOutEvent(type: this.widget.goodName));
+      if(mounted){
+        setState(() {
+        });
+      }
     }
   }
 

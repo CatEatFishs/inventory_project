@@ -32,6 +32,9 @@ class GoodAttributeTable extends BaseProvider {
   //系统时间
   final String _columnSystemTime = 'systemTime';
 
+  bool isSelect = false;//是否被选择
+
+  int id;
   String intAndOut; //出入库
   String type; //类型
   String model; //型号
@@ -54,19 +57,22 @@ class GoodAttributeTable extends BaseProvider {
   }
 
   GoodAttributeTable(
-      {this.intAndOut,
+      {this.id,
+        this.intAndOut,
       this.type,
       this.model,
       this.price,
       this.num,
       this.time,
-      this.systemTime});
+      this.systemTime,
+      this.isSelect=false});
 
   set setTabName(String tabName) {
     this.tableName = tabName;
   }
 
   GoodAttributeTable.fromMap(Map<String, dynamic> map) {
+    id=map[_columnId];
     intAndOut = map[_columnIntAndOut];
     type = map[_columnType];
     model = map[_columnModel];
@@ -78,13 +84,11 @@ class GoodAttributeTable extends BaseProvider {
 
   @override
   getTableName() {
-    debugPrint('创建数据库名字');
     return tableName;
   }
 
   @override
   tableFieldSqlString() {
-    debugPrint('创建数据库');
     return tableBaseString(tableName, _columnId) +
         """
         $_columnIntAndOut text ,
@@ -165,8 +169,6 @@ class GoodAttributeTable extends BaseProvider {
       Database database, String tableName,
       {String inAndOut, String model, String startTime, String endTime}) async {
     String sql;
-    debugPrint('inAndOut----$inAndOut');
-
     if (inAndOut == '不限' || inAndOut == '请选择') {
       sql =
           "SELECT * FROM $tableName WHERE  $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime <= '$endTime' ORDER BY time ";
@@ -174,8 +176,6 @@ class GoodAttributeTable extends BaseProvider {
       sql =
           "SELECT * FROM $tableName WHERE $_columnIntAndOut = '$inAndOut' and $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime<= '$endTime' ORDER BY time ";
     }
-
-    debugPrint('sql语句----$sql');
     List<Map<String, dynamic>> result = await database.rawQuery(sql);
     List<GoodAttributeTable> newList = List();
 
@@ -189,5 +189,13 @@ class GoodAttributeTable extends BaseProvider {
     }
 
     return newList;
+  }
+
+  //按照id 删除某一条数据
+  Future<int> queryDeleteIdData(Database database, String tableName,int id) {
+    String sql=
+        "DELETE FROM $tableName WHERE $_columnId = '$id'";
+    Future<int> rawDelete= database.rawDelete(sql);
+    return rawDelete;
   }
 }

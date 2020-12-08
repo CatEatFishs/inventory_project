@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
+import 'package:inventoryproject/provider/ds_provider.dart';
+import 'package:inventoryproject/provider/kt_provider.dart';
+import 'package:inventoryproject/provider/rqz_provider.dart';
+import 'package:inventoryproject/provider/rsq_provider.dart';
+import 'package:inventoryproject/provider/xyj_provider.dart';
+import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/R.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
 import 'package:inventoryproject/utils/list_title_utils.dart';
@@ -290,7 +296,7 @@ class _CheckRecordState extends State<CheckRecord> {
                   index,
                   TableRow(decoration: BoxDecoration(), children: [
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text('${goodList[index].intAndOut}',
@@ -299,7 +305,7 @@ class _CheckRecordState extends State<CheckRecord> {
                               fontWeight: FontWeight.w500)),
                     ),
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text('${goodList[index].model}',
@@ -308,7 +314,7 @@ class _CheckRecordState extends State<CheckRecord> {
                               fontWeight: FontWeight.w500)),
                     ),
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -316,13 +322,13 @@ class _CheckRecordState extends State<CheckRecord> {
                       ),
                     ),
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text('${goodList[index].num}'),
                     ),
                     Container(
-                      height: setWidth(60),
+                      height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -337,15 +343,70 @@ class _CheckRecordState extends State<CheckRecord> {
   }
 
   ///按条件查询
-  checkData() async {
+   checkData() async {
     if (goodTypeTitle.contains('请')) return showToast('请选择电器类型');
-    BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-    goodList = await bxProvider.queryConditionData(
-        inAndOut: inOrOutTitle,
-        model: goodTypeTitle,
-        startTime: DateUtils.DatePaserToMils(goodStartTime),
-        endTime: DateUtils.DatePaserToMils(goodEndTime));
-    debugPrint('goodListLength----${goodList.length}');
+    switch (goodTypeTitle) {
+      case '冰箱':
+        BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
+        goodList = await bxProvider.queryConditionData(
+            inAndOut: inOrOutTitle,
+            model: goodTypeTitle,
+            startTime: DateUtils.DatePaserToMils(goodStartTime),
+            endTime: DateUtils.DatePaserToMils(goodEndTime));
+        break;
+      case '洗衣机':
+        XyjProvide xyjProvider = Provider.of<XyjProvide>(
+            context, listen: false);
+        goodList = await xyjProvider.queryConditionData(
+            inAndOut: inOrOutTitle,
+            model: goodTypeTitle,
+            startTime: DateUtils.DatePaserToMils(goodStartTime),
+            endTime: DateUtils.DatePaserToMils(goodEndTime));
+        break;
+      case '空调':
+        KtProvide ktProvider = Provider.of<KtProvide>(context, listen: false);
+        goodList = await ktProvider.queryConditionData(
+            inAndOut: inOrOutTitle,
+            model: goodTypeTitle,
+            startTime: DateUtils.DatePaserToMils(goodStartTime),
+            endTime: DateUtils.DatePaserToMils(goodEndTime));
+        break;
+      case '电视':
+        DsProvide dsProvider = Provider.of<DsProvide>(context, listen: false);
+        goodList = await dsProvider.queryConditionData(
+            inAndOut: inOrOutTitle,
+            model: goodTypeTitle,
+            startTime: DateUtils.DatePaserToMils(goodStartTime),
+            endTime: DateUtils.DatePaserToMils(goodEndTime));
+        break;
+      case '燃气灶':
+        RqzProvide rqzProvider = Provider.of<RqzProvide>(
+            context, listen: false);
+        goodList = await rqzProvider.queryConditionData(
+            inAndOut: inOrOutTitle,
+            model: goodTypeTitle,
+            startTime: DateUtils.DatePaserToMils(goodStartTime),
+            endTime: DateUtils.DatePaserToMils(goodEndTime));
+        break;
+      case '抽烟机':
+        YyjProvide yyjProvider = Provider.of<YyjProvide>(
+            context, listen: false);
+        goodList = await yyjProvider.queryConditionData(
+            inAndOut: inOrOutTitle,
+            model: goodTypeTitle,
+            startTime: DateUtils.DatePaserToMils(goodStartTime),
+            endTime: DateUtils.DatePaserToMils(goodEndTime));
+        break;
+      case '热水器':
+        RsqProvide rsqProvider = Provider.of<RsqProvide>(
+            context, listen: false);
+        goodList = await rsqProvider.queryConditionData(
+            inAndOut: inOrOutTitle,
+            model: goodTypeTitle,
+            startTime: DateUtils.DatePaserToMils(goodStartTime),
+            endTime: DateUtils.DatePaserToMils(goodEndTime));
+        break;
+    }
     if (goodList.length == 0) {
       showToast('暂无数据');
     } else {
