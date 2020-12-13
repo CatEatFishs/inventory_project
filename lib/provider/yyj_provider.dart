@@ -1,11 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
+import 'package:inventoryproject/provider/default_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 //油烟机provide
-class YyjProvide extends ChangeNotifier {
+class YyjProvide extends DefaultProvider {
   final String tableName = 'YyjDateBaseTable';
+
+  init() async {
+    setTableName(tableName);
+    super.init();
+  }
+/*
   Database database;
   GoodAttributeTable goodAttributeTable;
   List<GoodAttributeTable> yyjDataList = [];
@@ -70,4 +77,6 @@ class YyjProvide extends ChangeNotifier {
 
   //查询剩余数据
   List<ResidueGoodModel> get getResidueDataList => residueDataList;
+
+   */
 }

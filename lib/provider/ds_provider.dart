@@ -1,11 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
+import 'package:inventoryproject/provider/default_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 //电视provide
-class DsProvide extends ChangeNotifier {
+class DsProvide extends DefaultProvider {
   final String tableName = 'DsDateBaseTable';
+
+  init() async {
+    setTableName(tableName);
+    super.init();
+  }
+/*
   Database database;
   GoodAttributeTable goodAttributeTable;
   List<GoodAttributeTable> dsDataList = [];
@@ -71,4 +78,6 @@ class DsProvide extends ChangeNotifier {
 
   //查询剩余数据
   List<ResidueGoodModel> get getResidueDataList => residueDataList;
+
+   */
 }

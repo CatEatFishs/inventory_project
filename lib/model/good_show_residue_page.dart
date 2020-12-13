@@ -153,9 +153,9 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
                 height: setWidth(60),
                 padding: EdgeInsets.only(left: 5),
                 alignment: Alignment.centerLeft,
-                child: Text('类型',
-                    style: TextStyle(
-                        fontSize: setSp(28), fontWeight: FontWeight.w500)),
+                child: Text('型号',
+                style: TextStyle(
+                    fontSize: setSp(28), fontWeight: FontWeight.w500)),
               ),
               Container(
                 height: setWidth(60),

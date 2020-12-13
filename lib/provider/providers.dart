@@ -11,6 +11,7 @@ import 'ds_provider.dart';
 import 'kt_provider.dart';
 import 'rqz_provider.dart';
 import 'rsq_provider.dart';
+import 'test_provider.dart';
 import 'xyj_provider.dart';
 import 'yyj_provider.dart';
 
@@ -30,4 +31,5 @@ final _providers = [
   buildProvider<RqzProvide>(RqzProvide()..init()),
   buildProvider<XyjProvide>(XyjProvide()..init()),
   buildProvider<YyjProvide>(YyjProvide()..init()),
+  buildProvider<TestProvider>(TestProvider()..init())
 ];

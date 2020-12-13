@@ -6,8 +6,14 @@ import 'package:sqflite/sqflite.dart';
 import 'default_provider.dart';
 
 //冰箱provide
-class BxProvide extends ChangeNotifier {
+class BxProvide extends DefaultProvider {
   final String tableName = 'BxDateBaseTable';
+
+  init() async {
+    setTableName(tableName);
+    super.init();
+  }
+/*
   Database database;
   GoodAttributeTable goodAttributeTable;
 
@@ -79,4 +85,6 @@ class BxProvide extends ChangeNotifier {
 
   //查询剩余数据
   List<ResidueGoodModel> get getResidueDataList => residueDataList;
+
+   */
 }

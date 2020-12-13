@@ -6,6 +6,7 @@ import 'package:inventoryproject/provider/ds_provider.dart';
 import 'package:inventoryproject/provider/kt_provider.dart';
 import 'package:inventoryproject/provider/rqz_provider.dart';
 import 'package:inventoryproject/provider/rsq_provider.dart';
+import 'package:inventoryproject/provider/test_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/R.dart';

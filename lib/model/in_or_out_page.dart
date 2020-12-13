@@ -8,6 +8,7 @@ import 'package:inventoryproject/provider/kt_provider.dart';
 import 'package:inventoryproject/provider/providers.dart';
 import 'package:inventoryproject/provider/rqz_provider.dart';
 import 'package:inventoryproject/provider/rsq_provider.dart';
+import 'package:inventoryproject/provider/test_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/R.dart';
@@ -37,6 +38,8 @@ class _InOrOutPageState extends State<InOrOutPage> {
   TextEditingController xhController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController numController = TextEditingController();
+  bool isIn = true; //true 入库  false 出库
+  List<GoodAttributeTable> sameXhRecordList = [];
 
   @override
   void initState() {
@@ -76,25 +79,25 @@ class _InOrOutPageState extends State<InOrOutPage> {
                 height: setWidth(1),
               ),
               ListTitleUtils.listTitleEdit(
-                  leadingStr: '型    号:', editText: xhWidget()),
+                  leadingStr: '型    号：', editText: xhWidget()),
               Divider(
                 color: R.color_gray_666,
                 height: setWidth(1),
               ),
               ListTitleUtils.listTitleEdit(
-                  leadingStr: '价    格:', editText: priceWidget()),
+                  leadingStr: '价    格：', editText: priceWidget()),
               Divider(
                 color: R.color_gray_666,
                 height: setWidth(1),
               ),
               ListTitleUtils.listTitleEdit(
-                  leadingStr: '数    量:', editText: numWidget()),
+                  leadingStr: '数    量：', editText: numWidget()),
               Divider(
                 color: R.color_gray_666,
                 height: setWidth(1),
               ),
               ListTitleUtils.listTitle(
-                  leadingStr: '出入库时间：',
+                  leadingStr: isIn ? '入库时间：' : '出库时间：',
                   title: goodTime,
                   function: _showDatePicker),
               Divider(
@@ -137,6 +140,11 @@ class _InOrOutPageState extends State<InOrOutPage> {
         selectedIndexList: [0], onConfirm: (indexList, valueList) {
       setState(() {
         inOrOutTitle = inOrOutList[indexList[0]];
+        if (inOrOutTitle == '出库') {
+          isIn = false;
+        } else {
+          isIn = true;
+        }
         FocusScope.of(context).requestFocus(FocusNode());
       });
     });
@@ -158,23 +166,47 @@ class _InOrOutPageState extends State<InOrOutPage> {
   //型号
   Widget xhWidget() {
     return Container(
-      padding: EdgeInsets.only(left: setWidth(30)),
-      child: EditableText(
-          controller: xhController,
-          focusNode: FocusNode(),
-          style: TextStyle(
-              fontSize: setSp(32),
-              color: Colors.black,
-              textBaseline: TextBaseline.alphabetic),
-          cursorColor: Colors.blue,
-          backgroundCursorColor: Colors.white),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: setWidth(250),
+            child: EditableText(
+                controller: xhController,
+                focusNode: FocusNode(),
+                style: TextStyle(
+                    fontSize: setSp(32),
+                    color: Colors.black,
+                    textBaseline: TextBaseline.alphabetic),
+                cursorColor: Colors.blue,
+                backgroundCursorColor: Colors.white),
+          ),
+          Offstage(
+            offstage: isIn,
+            child: Container(
+              width: setWidth(80),
+              height: setWidth(54),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(setWidth(4))),
+                  border: Border.all(
+                      color: Colors.lightBlueAccent, width: setWidth(2))
+              ),
+              child: Text('查询', style: TextStyle(
+                  fontSize: setSp(32),
+                  color: Colors.lightBlueAccent,
+                  textBaseline: TextBaseline.alphabetic
+              ),),
+              alignment: Alignment.center,
+            ),
+          )
+        ],
+      ),
     );
   }
 
   //价格
   Widget priceWidget() {
     return Container(
-      margin: EdgeInsets.only(left: setWidth(30)),
       child: EditableText(
           controller: priceController,
           focusNode: FocusNode(),
@@ -191,7 +223,6 @@ class _InOrOutPageState extends State<InOrOutPage> {
   //数量
   Widget numWidget() {
     return Container(
-      margin: EdgeInsets.only(left: setWidth(30)),
       child: EditableText(
           controller: numController,
           focusNode: FocusNode(),
@@ -229,10 +260,12 @@ class _InOrOutPageState extends State<InOrOutPage> {
         intAndOut: inOrOutTitle,
         type: goodTypeTitle,
         model: xhController.text.trim(),
-        price: priceController.text.trim(),
-        num: inOrOutTitle == '出库'
-            ? '-${numController.text.trim()}'
-            : '${numController.text.trim()}',
+        price: inOrOutTitle == '入库' ? priceController.text.trim() : '0',
+        num: inOrOutTitle == '入库' ? numController.text.trim() : '0',
+        outNum: inOrOutTitle == '入库' ? '0' : '0',
+        //需要计算出库数量
+        residueNum: inOrOutTitle == '入库' ? '${numController.text.trim()}' : '0',
+        outPrice: inOrOutTitle == '入库' ? '0' : priceController.text.trim(),
         time: DateUtils.DatePaserToMils(goodTime),
         systemTime: DateTime.now().toString());
 
@@ -351,4 +384,36 @@ class _InOrOutPageState extends State<InOrOutPage> {
   bool isInAndOut() {
     return inOrOutTitle == '出库';
   }
+
+  /*
+      1.查询此型号 剩余数量>0的记录
+   */
+
+  //查询同一型号剩余数量大于0的记录
+  checkSameXhRecord() async {
+    switch (goodTypeTitle) {
+      case '冰箱':
+        BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
+        checkSameXhRecordFunction(bxProvider);
+        break;
+      case '冰箱':
+        TestProvider testProvider = Provider.of<TestProvider>(
+            context, listen: false);
+        checkSameXhRecordFunction(testProvider);
+        break;
+        break;
+    }
+    return [];
+  }
+
+  Future<List<GoodAttributeTable>> checkSameXhRecordFunction(
+      DefaultProvider provider) async {
+    sameXhRecordList = await provider.checkSameXhRecord(goodTypeTitle);
+    // if(sameXhRecordList.length){
+    //
+    // }
+  }
+//型号 剩余数量  入库价格  要出库数量
+
+
 }
