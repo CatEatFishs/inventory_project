@@ -221,6 +221,7 @@ class GoodAttributeTable extends BaseProvider {
       String tableName, String model) async {
     String sql =
         "SELECT * FROM $tableName WHERE $_columnModel = '$model' and $_columnResidueNum > '0' ORDER BY time";
+    debugPrint('sql----$sql');
     List<Map<String, dynamic>> result = await database.rawQuery(sql);
     List<GoodAttributeTable> newList = List();
     if (result != null) {
