@@ -89,4 +89,10 @@ class DefaultProvider extends ChangeNotifier {
     return await goodAttributeTable.queryCheckSameXhRecord(
         database, tableName, goodTypeTitle);
   }
+
+  //修改数据库（根据id 修改 出库，剩余字段）
+  Future<int> upDataData(GoodAttributeTable table) async {
+    return await goodAttributeTable.queryUpDataDataRecord(
+        database, tableName, table);
+  }
 }

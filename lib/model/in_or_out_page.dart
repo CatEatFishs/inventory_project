@@ -41,12 +41,12 @@ class _InOrOutPageState extends State<InOrOutPage> {
   TextEditingController numController = TextEditingController();
   bool isIn = true; //true 入库  false 出库
 
-  GoodAttributeTable table; //入库table
-  List<GoodAttributeTable> outTableList = []; //出库table
+  List<GoodAttributeTable> inAndOutTableList = []; //出入库table
+  List<GoodAttributeTable> upDataTableList = []; //修改的table
 
   int totalOutNum = 0; //待要出库数量
 
-  List<ResidueModel> residueModelList = [];
+  List<ResidueModel> residueModelList = []; //查出来剩余数量list
 
   @override
   void initState() {
@@ -381,13 +381,14 @@ class _InOrOutPageState extends State<InOrOutPage> {
                                 height: 20,
                                 child: RaisedButton(
                                   onPressed: () {
-                                    if (residueModelList[index].outNum <
+                                    if (residueModelList[index].currentOutNum <
                                         int.parse(
                                             residueModelList[index]
                                                 .residueNum)) {
                                       if (mounted) {
                                         setState(() {
-                                          residueModelList[index].outNum++;
+                                          residueModelList[index]
+                                              .currentOutNum++;
                                         });
                                       }
                                     } else {
@@ -401,17 +402,18 @@ class _InOrOutPageState extends State<InOrOutPage> {
                                   ),
                                 ),
                               ),
-                              Text('${residueModelList[index].outNum}'),
+                              Text('${residueModelList[index].currentOutNum}'),
                               Container(
                                 width: 40,
                                 height: 20,
                                 child: RaisedButton(
                                   onPressed: () {
-                                    if (residueModelList[index].outNum == 0)
+                                    if (residueModelList[index].currentOutNum ==
+                                        0)
                                       return;
                                     if (mounted) {
                                       setState(() {
-                                        residueModelList[index].outNum--;
+                                        residueModelList[index].currentOutNum--;
                                       });
                                     }
                                   },
@@ -438,9 +440,9 @@ class _InOrOutPageState extends State<InOrOutPage> {
     if (xhController.text.isEmpty) return showToast('请填写型号！');
     if (priceController.text.isEmpty) return showToast('请填写价格！');
     if (numController.text.isEmpty) return showToast('请填写数量！');
-    if (checkOutNum()) return showToast('填写出库数量与待出库数量不匹配！');
+    if (!checkOutNum()) return showToast('填写出库数量与待出库数量不匹配！');
     if (inOrOutTitle == '入库') {
-      table = new GoodAttributeTable(
+      GoodAttributeTable table = new GoodAttributeTable(
           intAndOut: inOrOutTitle,
           type: goodTypeTitle,
           model: xhController.text.trim(),
@@ -451,10 +453,11 @@ class _InOrOutPageState extends State<InOrOutPage> {
           outPrice: '0',
           time: DateUtils.DatePaserToMils(goodTime),
           systemTime: DateTime.now().toString());
+      inAndOutTableList.add(table);
     } else {
-      //出库 1.增加出库记录 2.修改库存
+      //出库 1.增加出库记录
       residueModelList.forEach((element) {
-        if (element.outNum > 0) {
+        if (element.currentOutNum > 0) {
           GoodAttributeTable table = GoodAttributeTable(
               intAndOut: inOrOutTitle,
               type: goodTypeTitle,
@@ -467,35 +470,30 @@ class _InOrOutPageState extends State<InOrOutPage> {
               time: DateUtils.DatePaserToMils(goodTime),
               systemTime: DateTime.now().toString()
           );
-          outTableList.add(table);
+          inAndOutTableList.add(table);
+          //2.修改库存
+          GoodAttributeTable upDataTable = GoodAttributeTable(
+            id: element.id,
+            outNum: (int.parse(element.outNum) + element.currentOutNum)
+                .toString(), //出库数 = 以前出库数+将要出库数
+            residueNum: (int.parse(element.residueNum) - element.currentOutNum)
+                .toString(), //剩余 = 以前剩余数-将要出库数
+          );
+          upDataTableList.add(upDataTable);
         }
       });
     }
-    /*
-    table = new GoodAttributeTable(
-        intAndOut: inOrOutTitle,
-        type: goodTypeTitle,
-        model: xhController.text.trim(),
-        price: inOrOutTitle == '入库' ? priceController.text.trim() : '0',
-        num: inOrOutTitle == '入库' ? numController.text.trim() : '0',
-        outNum: inOrOutTitle == '入库' ? '0' : '$totalOutNum',
-        //需要计算出库数量
-        residueNum: inOrOutTitle == '入库' ? '${numController.text.trim()}' : '0',
-        outPrice: inOrOutTitle == '入库' ? '0' : priceController.text.trim(),
-        time: DateUtils.DatePaserToMils(goodTime),
-        systemTime: DateTime.now().toString());
-
-     */
-
     setType();
+
   }
 
   List<ResidueGoodModel> list;
 
   //检查待出库数量是否匹配输入数量
   bool checkOutNum() {
+    totalOutNum = 0;
     residueModelList.forEach((element) {
-      totalOutNum += element.outNum;
+      totalOutNum += element.currentOutNum;
     });
     return totalOutNum == int.parse(numController.text.trim());
   }
@@ -505,81 +503,40 @@ class _InOrOutPageState extends State<InOrOutPage> {
     switch (goodTypeTitle) {
       case '冰箱':
         BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-        if (isInAndOut()) {
-          list = bxProvider.getResidueDataList;
-          if (!isResidueGood()) {
-            return showToast('出库数量不能大于库存数');
-          }
-        }
-        await bxProvider.insertData(table);
-        await bxProvider.queryAll();
+        insertData(bxProvider);
+        updateData(bxProvider);
         break;
       case '洗衣机':
         XyjProvide xyjProvider =
         Provider.of<XyjProvide>(context, listen: false);
-        if (isInAndOut()) {
-          list = xyjProvider.getResidueDataList;
-          if (!isResidueGood()) {
-            return showToast('出库数量不能大于库存数');
-          }
-        }
-        await xyjProvider.insertData(table);
-        await xyjProvider.queryAll();
+        insertData(xyjProvider);
+        updateData(xyjProvider);
         break;
       case '空调':
         KtProvide ktProvide = Provider.of<KtProvide>(context, listen: false);
-        if (isInAndOut()) {
-          list = ktProvide.getResidueDataList;
-          if (!isResidueGood()) {
-            return showToast('出库数量不能大于库存数');
-          }
-        }
-        await ktProvide.insertData(table);
-        await ktProvide.queryAll();
+        insertData(ktProvide);
+        updateData(ktProvide);
         break;
       case '电视':
         DsProvide dsProvider = Provider.of<DsProvide>(context, listen: false);
-        if (isInAndOut()) {
-          list = dsProvider.getResidueDataList;
-          if (!isResidueGood()) {
-            return showToast('出库数量不能大于库存数');
-          }
-        }
-        await dsProvider.insertData(table);
-        await dsProvider.queryAll();
+        insertData(dsProvider);
+        updateData(dsProvider);
         break;
       case '燃气灶':
         RqzProvide rqzProvide = Provider.of<RqzProvide>(context, listen: false);
-        if (isInAndOut()) {
-          list = rqzProvide.getResidueDataList;
-          if (!isResidueGood()) {
-            return showToast('出库数量不能大于库存数');
-          }
-        }
-        await rqzProvide.insertData(table);
-        await rqzProvide.queryAll();
+        insertData(rqzProvide);
+        updateData(rqzProvide);
         break;
       case '油烟机':
         YyjProvide yyjProvide = Provider.of<YyjProvide>(context, listen: false);
-        if (isInAndOut()) {
-          list = yyjProvide.getResidueDataList;
-          if (!isResidueGood()) {
-            return showToast('出库数量不能大于库存数');
-          }
-        }
-        await yyjProvide.insertData(table);
-        await yyjProvide.queryAll();
+        insertData(yyjProvide);
+        updateData(yyjProvide);
+
         break;
       case '热水器':
         RsqProvide rsqProvide = Provider.of<RsqProvide>(context, listen: false);
-        if (isInAndOut()) {
-          list = rsqProvide.getResidueDataList;
-          if (!isResidueGood()) {
-            return showToast('出库数量不能大于库存数');
-          }
-        }
-        await rsqProvide.insertData(table);
-        await rsqProvide.queryAll();
+        insertData(rsqProvide);
+        updateData(rsqProvide);
         break;
     }
 
@@ -587,47 +544,52 @@ class _InOrOutPageState extends State<InOrOutPage> {
     NavigatorRoute.pop(context);
   }
 
-
-  //出库时 是否够数量
-  bool isResidueGood() {
-    String model = xhController.text.trim();
-    String num = numController.text.trim();
-    if (list != null) {
-      list.forEach((element) {
-        if (element.model == model && element.sumNum >= int.parse(num)) {
-          return true;
-        }
-      });
-    }
-    return false;
+  //插入数据库
+  Future<void> insertData(DefaultProvider provider) async {
+    inAndOutTableList.forEach((element) async {
+      await provider.insertData(element);
+    });
   }
 
-  //出入库  入库false 出库 true
-  bool isInAndOut() {
-    return inOrOutTitle == '出库';
+  //修改数据库
+  updateData(DefaultProvider provider) async {
+    upDataTableList.forEach((element) async {
+      await provider.upDataData(element);
+    });
   }
-
-  /*
-      1.查询此型号 剩余数量>0的记录
-   */
 
   //查询同一型号剩余数量大于0的记录
   checkSameXhRecord() async {
     if (xhController.text
         .trim()
         .isEmpty) return showToast('请填写查询型号！');
+    DefaultProvider provider;
     switch (goodTypeTitle) {
       case '冰箱':
-        BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-        checkSameXhRecordFunction(bxProvider);
+        provider = Provider.of<BxProvide>(context, listen: false);
+        break;
+      case '洗衣机':
+        provider =
+            Provider.of<XyjProvide>(context, listen: false);
+        break;
+      case '空调':
+        provider = Provider.of<KtProvide>(context, listen: false);
         break;
       case '电视':
-        TestProvider testProvider =
-        Provider.of<TestProvider>(context, listen: false);
-        checkSameXhRecordFunction(testProvider);
+        provider = Provider.of<DsProvide>(context, listen: false);
+        break;
+      case '燃气灶':
+        provider = Provider.of<RqzProvide>(context, listen: false);
+        checkSameXhRecordFunction(provider);
+        break;
+      case '油烟机':
+        provider = Provider.of<YyjProvide>(context, listen: false);
+        break;
+      case '热水器':
+        provider = Provider.of<RsqProvide>(context, listen: false);
         break;
     }
-    return [];
+    checkSameXhRecordFunction(provider);
   }
 
   //查询同一型号剩余数量大于0的记录
@@ -639,7 +601,12 @@ class _InOrOutPageState extends State<InOrOutPage> {
       sameXhRecordList.forEach((element) {
         residueModelList.add(
             ResidueModel(
-                element.id, element.model, element.residueNum, element.price,
+                element.id,
+                element.model,
+                element.num,
+                element.residueNum,
+                element.price,
+                element.outNum,
                 0));
       });
       if (mounted) {
@@ -655,9 +622,12 @@ class _InOrOutPageState extends State<InOrOutPage> {
 class ResidueModel {
   int id;
   String xh;
-  String residueNum;
+  String num; //总数量
+  String residueNum; //剩余数量
   String price;
-  int outNum;
+  String outNum;
+  int currentOutNum;
 
-  ResidueModel(this.id, this.xh, this.residueNum, this.price, this.outNum);
+  ResidueModel(this.id, this.xh, this.num, this.residueNum, this.price,
+      this.outNum, this.currentOutNum);
 }

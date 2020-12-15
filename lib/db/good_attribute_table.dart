@@ -65,7 +65,7 @@ class GoodAttributeTable extends BaseProvider {
       _columnNum: num,
       _columnTime: time,
       _columnSystemTime: systemTime,
-      _columnOutNum: outNum ?? 0,
+      _columnOutNum: outNum ?? '0',
       _columnResidueNum: residueNum ?? num,
       _columnOutPrice: outPrice
     };
@@ -221,7 +221,6 @@ class GoodAttributeTable extends BaseProvider {
       String tableName, String model) async {
     String sql =
         "SELECT * FROM $tableName WHERE $_columnModel = '$model' and $_columnResidueNum > '0' ORDER BY time";
-    debugPrint('sql----$sql');
     List<Map<String, dynamic>> result = await database.rawQuery(sql);
     List<GoodAttributeTable> newList = List();
     if (result != null) {
@@ -230,5 +229,14 @@ class GoodAttributeTable extends BaseProvider {
       });
     }
     return newList;
+  }
+
+  Future<int> queryUpDataDataRecord(
+      Database database, String tableName, GoodAttributeTable table) async {
+    String sql =
+        "UPDATE $tableName SET $_columnOutNum = '${table.outNum}',$_columnResidueNum = '${table.residueNum}' WHERE $_columnId = '${table.id}' ";
+    int result = await database.rawUpdate(sql);
+    debugPrint('sql----$sql----value-$result');
+    return result;
   }
 }
