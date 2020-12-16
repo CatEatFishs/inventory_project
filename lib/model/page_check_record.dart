@@ -162,7 +162,7 @@ class _CheckRecordState extends State<CheckRecord> {
 
   setData() {
     inOrOutList = ['不限', '入库', '出库'];
-    goodTypeList = ['冰箱', '洗衣机', '空调', '电视', '燃气灶', '油烟机', '热水器'];
+    goodTypeList = ['冰箱', '洗衣机', '空调', '电视', '燃气灶', '油烟机', '热水器','小家电','配件'];
     goodStartTime = goodEndTime =
         '${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}';
   }
@@ -216,7 +216,7 @@ class _CheckRecordState extends State<CheckRecord> {
         child: Table(
           columnWidths: {
             //列宽
-            4: FixedColumnWidth(setWidth(200)),
+            4: FixedColumnWidth(setWidth(180)),
           },
           //表格边框样式
           border: TableBorder(
@@ -285,7 +285,7 @@ class _CheckRecordState extends State<CheckRecord> {
             // 1: FixedColumnWidth(getUnitWidth),
             // 2: FixedColumnWidth(getDoubleUnitWidth),
             // 3: FixedColumnWidth(getUnitWidth),
-            4: FixedColumnWidth(setWidth(200)),
+            4: FixedColumnWidth(setWidth(180)),
           },
           //表格边框样式
           border: TableBorder.all(

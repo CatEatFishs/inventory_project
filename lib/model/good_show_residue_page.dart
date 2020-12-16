@@ -7,8 +7,10 @@ import 'package:inventoryproject/provider/bx_provider.dart';
 import 'package:inventoryproject/provider/default_provider.dart';
 import 'package:inventoryproject/provider/ds_provider.dart';
 import 'package:inventoryproject/provider/kt_provider.dart';
+import 'package:inventoryproject/provider/pj_provider.dart';
 import 'package:inventoryproject/provider/rqz_provider.dart';
 import 'package:inventoryproject/provider/rsq_provider.dart';
+import 'package:inventoryproject/provider/xjd_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
@@ -201,10 +203,10 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
         provider = Provider.of<RsqProvide>(context, listen: false);
         break;
       case '小家电':
-        provider = Provider.of<RsqProvide>(context, listen: false);
+        provider = Provider.of<XjdProvide>(context, listen: false);
         break;
       case '配件':
-        provider = Provider.of<RsqProvide>(context, listen: false);
+        provider = Provider.of<PjProvide>(context, listen: false);
         break;
     }
     queryResidueAll(provider);

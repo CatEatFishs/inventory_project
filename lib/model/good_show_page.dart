@@ -25,7 +25,9 @@ class _GoodShowPageState extends State<GoodShowPage>
       new Tab(text: '电视'),
       new Tab(text: '燃气灶'),
       new Tab(text: '油烟机'),
-      new Tab(text: '热水器')
+      new Tab(text: '热水器'),
+      new Tab(text: '小家电'),
+      new Tab(text: '配件')
     ];
     tabController = new TabController(length: myTabs.length, vsync: this);
   }

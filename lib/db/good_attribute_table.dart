@@ -193,10 +193,10 @@ class GoodAttributeTable extends BaseProvider {
     String sql;
     if (inAndOut == '不限' || inAndOut == '请选择') {
       sql =
-          "SELECT * FROM $tableName WHERE  $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime <= '$endTime' ORDER BY time ";
+          "SELECT * FROM $tableName WHERE  $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime <= '$endTime' ORDER BY time DESC ";
     } else {
       sql =
-          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '$inAndOut' and $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime<= '$endTime' ORDER BY time ";
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '$inAndOut' and $_columnType = '$model' and $_columnTime >= '$startTime' and $_columnTime<= '$endTime' ORDER BY time DESC";
     }
     List<Map<String, dynamic>> result = await database.rawQuery(sql);
     List<GoodAttributeTable> newList = List();
