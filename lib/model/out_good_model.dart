@@ -1,25 +1,28 @@
-//剩余库存model
-class ResidueGoodModel {
+//已出库存model
+class OutGoodModel {
   String model;
   String time;
+  int outNum;
   double price;
-  int residueNum;
+  double outPrice;
 
-  ResidueGoodModel({this.model, this.time, this.price, this.residueNum});
+  OutGoodModel({this.model, this.time, this.outNum, this.price, this.outPrice});
 
-  ResidueGoodModel.fromJson(Map<String, dynamic> json) {
+  OutGoodModel.fromJson(Map<String, dynamic> json) {
     model = json['model'];
     time = json['time'];
+    outNum = json['outNum'];
     price = json['price'];
-    residueNum = json['residueNum'];
+    outPrice = json['outPrice'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['model'] = this.model;
     data['time'] = this.time;
+    data['outNum'] = this.outNum;
     data['price'] = this.price;
-    data['residueNum'] = this.residueNum;
+    data['outPrice'] = this.outPrice;
     return data;
   }
 }

@@ -326,7 +326,9 @@ class _CheckRecordState extends State<CheckRecord> {
                       height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
-                      child: Text('${goodList[index].num}'),
+                      child: Text(goodList[index].intAndOut == '入库'
+                          ? '${goodList[index].num}'
+                          : '${goodList[index].outNum}'),
                     ),
                     Container(
                       height: setWidth(90),

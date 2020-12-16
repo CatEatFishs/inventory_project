@@ -1,6 +1,7 @@
 //商品属性
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/db_base_provider.dart';
+import 'package:inventoryproject/model/out_good_model.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:inventoryproject/utils/date_utils.dart';
 import 'package:sqflite/sqflite.dart';
@@ -238,5 +239,61 @@ class GoodAttributeTable extends BaseProvider {
     int result = await database.rawUpdate(sql);
     debugPrint('sql----$sql----value-$result');
     return result;
+  }
+
+  //详细查询剩余库存
+  Future<List<ResidueGoodModel>> queryResidueInventoryData(Database database,
+      String tableName, String startTime, String endTime) async {
+    String sql;
+    if (startTime == null && endTime != null) {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '入库' and $_columnResidueNum > '0' and $_columnTime <= '$endTime' ORDER BY model";
+    } else if (startTime != null && endTime == null) {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '入库' and $_columnResidueNum > '0' and $_columnTime >= '$startTime' ORDER BY model";
+    } else if (startTime == null && endTime == null) {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '入库' and $_columnResidueNum > '0' ORDER BY model";
+    } else {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '入库' and $_columnResidueNum > '0' and $_columnTime >= '$startTime' and $_columnTime <= '$endTime' ORDER BY model";
+    }
+
+    List<Map<String, dynamic>> result = await database.rawQuery(sql);
+    List<ResidueGoodModel> newList = List();
+    if (result != null) {
+      result.forEach((value) {
+        newList.add(ResidueGoodModel.fromJson(value));
+      });
+    }
+    return newList;
+  }
+
+//详细查询已出库存
+  Future<List<OutGoodModel>> queryOutInventoryData(Database database,
+      String tableName, String startTime, String endTime) async {
+    String sql;
+    if (startTime == null && endTime != null) {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '出库' and $_columnOutNum > '0' and $_columnTime <= '$endTime' ORDER BY model";
+    } else if (startTime != null && endTime == null) {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '出库' and $_columnOutNum > '0' and $_columnTime >= '$startTime' ORDER BY model";
+    } else if (startTime == null && endTime == null) {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '出库' and $_columnOutNum > '0' ORDER BY model";
+    } else {
+      sql =
+          "SELECT * FROM $tableName WHERE $_columnIntAndOut = '出库' and $_columnOutNum > '0' and $_columnTime >= '$startTime' and $_columnTime <= '$endTime' ORDER BY model";
+    }
+
+    List<Map<String, dynamic>> result = await database.rawQuery(sql);
+    List<OutGoodModel> newList = List();
+    if (result != null) {
+      result.forEach((value) {
+        newList.add(OutGoodModel.fromJson(value));
+      });
+    }
+    return newList;
   }
 }

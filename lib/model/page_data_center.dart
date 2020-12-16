@@ -4,6 +4,8 @@ import 'package:inventoryproject/utils/route_navigator.dart';
 import 'package:inventoryproject/utils/screens.dart';
 
 import 'page_check_record.dart';
+import 'page_out_inventory.dart';
+import 'page_residue_inventory.dart';
 import 'record_page.dart';
 
 //数据中心
@@ -60,6 +62,42 @@ class _DataCenterState extends State<DataCenter> {
             height: setWidth(1),
             color: R.color_gray_666,
           ),
+          GestureDetector(
+            onTap: () => jumpToPage('剩余库存'),
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              height: setWidth(94),
+              width: getScreenWidth(),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '剩余库存',
+                style: _textLeaveLeadingStyle,
+              ),
+            ),
+          ),
+          Container(
+            width: getScreenWidth(),
+            height: setWidth(1),
+            color: R.color_gray_666,
+          ),
+          GestureDetector(
+            onTap: () => jumpToPage('已出库存'),
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              height: setWidth(94),
+              width: getScreenWidth(),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '已出库存',
+                style: _textLeaveLeadingStyle,
+              ),
+            ),
+          ),
+          Container(
+            width: getScreenWidth(),
+            height: setWidth(1),
+            color: R.color_gray_666,
+          ),
         ],
       ),
     ));
@@ -68,8 +106,12 @@ class _DataCenterState extends State<DataCenter> {
   jumpToPage(String pageName) {
     if (pageName == '查询记录') {
       NavigatorRoute.push(context, CheckRecord(), pageName: null);
-    } else {
+    } else if (pageName == '历史记录') {
       NavigatorRoute.push(context, RecordPage(), pageName: null);
+    } else if (pageName == '剩余库存') {
+      NavigatorRoute.push(context, ResidueInventoryPage(), pageName: null);
+    } else {
+      NavigatorRoute.push(context, OutInventoryPage(), pageName: null);
     }
   }
 }

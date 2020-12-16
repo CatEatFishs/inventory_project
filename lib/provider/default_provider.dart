@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventoryproject/model/out_good_model.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
@@ -94,5 +95,23 @@ class DefaultProvider extends ChangeNotifier {
   Future<int> upDataData(GoodAttributeTable table) async {
     return await goodAttributeTable.queryUpDataDataRecord(
         database, tableName, table);
+  }
+
+  //详细查询剩余库存
+  Future<List<ResidueGoodModel>> queryResidueInventoryData(
+      {String startTime, String endTime}) async {
+    if (startTime == null || startTime.isEmpty) startTime = null;
+    if (startTime == null || startTime.isEmpty) endTime = null;
+    return await goodAttributeTable.queryResidueInventoryData(
+        database, tableName, startTime, endTime);
+  }
+
+  //详细查询已出库存
+  Future<List<OutGoodModel>> queryOutInventoryData(
+      {String startTime, String endTime}) async {
+    if (startTime == null || startTime.isEmpty) startTime = null;
+    if (startTime == null || startTime.isEmpty) endTime = null;
+    return await goodAttributeTable.queryOutInventoryData(
+        database, tableName, startTime, endTime);
   }
 }

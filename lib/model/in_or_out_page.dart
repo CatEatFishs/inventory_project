@@ -468,12 +468,11 @@ class _InOrOutPageState extends State<InOrOutPage> {
               model: xhController.text.trim(),
               price: element.price,
               num: 0,
-              outNum: element.outNum,
+              outNum: element.currentOutNum,
               residueNum: 0,
               outPrice: UtilsWidget.str2double(priceController.text.trim()),
               time: DateUtils.DatePaserToMils(goodTime),
-              systemTime: DateTime.now().toString()
-          );
+              systemTime: DateTime.now().toString());
           inAndOutTableList.add(table);
           //2.修改库存
           GoodAttributeTable upDataTable = GoodAttributeTable(
