@@ -31,4 +31,26 @@ class UtilsWidget {
       enableInfiniteLoad: false,
     );
   }
+  static double str2double(String str){
+    try{
+      if(str!=null&&str.isNotEmpty){
+        return double.parse(str);
+      }
+    }catch (_){
+      return 0.0;
+    }
+
+    return 0.0;
+  }
+  static int str2int(String str){
+    try{
+      if(str!=null&&str.isNotEmpty){
+        return int.parse(str);
+      }
+    }catch (_){
+      return 0;
+    }
+
+    return 0;
+  }
 }

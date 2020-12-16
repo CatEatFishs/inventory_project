@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
@@ -6,10 +5,11 @@ import 'package:inventoryproject/provider/bx_provider.dart';
 import 'package:inventoryproject/provider/default_provider.dart';
 import 'package:inventoryproject/provider/ds_provider.dart';
 import 'package:inventoryproject/provider/kt_provider.dart';
+import 'package:inventoryproject/provider/pj_provider.dart';
 import 'package:inventoryproject/provider/providers.dart';
 import 'package:inventoryproject/provider/rqz_provider.dart';
 import 'package:inventoryproject/provider/rsq_provider.dart';
-import 'package:inventoryproject/provider/test_provider.dart';
+import 'package:inventoryproject/provider/xjd_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/R.dart';
@@ -21,6 +21,7 @@ import 'package:inventoryproject/utils/toast_utils.dart';
 import 'package:inventoryproject/utils/util_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:inventoryproject/utils/utils.dart';
+import 'package:inventoryproject/utils/utils_widget.dart';
 
 import 'residue_good_model.dart';
 
@@ -56,7 +57,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
 
   setData() {
     inOrOutList = ['入库', '出库'];
-    goodTypeList = ['冰箱', '洗衣机', '空调', '电视', '燃气灶', '油烟机', '热水器'];
+    goodTypeList = ['冰箱', '洗衣机', '空调', '电视', '燃气灶', '油烟机', '热水器','小家电','配件'];
     goodTime =
     '${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}';
   }
@@ -132,6 +133,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
                   ),
                 ),
               ),
+              SizedBox(height: setWidth(30)),
               tabWidget()
             ],
           ),
@@ -320,118 +322,120 @@ class _InOrOutPageState extends State<InOrOutPage> {
   }
 
   Widget tabWidget() {
-    return Column(
-      children: [
-        Offstage(
-          offstage: residueModelList.length == 0,
-          child: headWidget(),
-        ),
-        Container(
-            child: Table(
-              //表格边框样式
-              border: TableBorder.all(
-                color: Colors.black.withOpacity(0.5),
-              ),
-              columnWidths: {
-                //列宽
-                // 0: FixedColumnWidth(getDoubleUnitWidth),
-                // 1: FixedColumnWidth(getUnitWidth),
-                // 2: FixedColumnWidth(getDoubleUnitWidth),
-                // 3: FixedColumnWidth(getUnitWidth),
-                3: FixedColumnWidth(setWidth(230)),
-              },
-              children: (residueModelList
-                  .asMap()
-                  .map((index, model) =>
-                  MapEntry(
-                      index,
-                      TableRow(decoration: BoxDecoration(), children: [
-                        Container(
-                          height: setWidth(90),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text('${residueModelList[index].xh}',
-                              style: TextStyle(
-                                  fontSize: setSp(28),
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        Container(
-                          height: setWidth(90),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '${residueModelList[index].residueNum}',
+    return Offstage(
+      offstage: inOrOutTitle=='入库',
+      child: Column(
+        children: [
+          Offstage(
+            offstage: residueModelList.length == 0,
+            child: headWidget(),
+          ),
+          Container(
+              child: Table(
+                //表格边框样式
+                border: TableBorder.all(
+                  color: Colors.black.withOpacity(0.5),
+                ),
+                columnWidths: {
+                  //列宽
+                  // 0: FixedColumnWidth(getDoubleUnitWidth),
+                  // 1: FixedColumnWidth(getUnitWidth),
+                  // 2: FixedColumnWidth(getDoubleUnitWidth),
+                  // 3: FixedColumnWidth(getUnitWidth),
+                  3: FixedColumnWidth(setWidth(230)),
+                },
+                children: (residueModelList
+                    .asMap()
+                    .map((index, model) =>
+                    MapEntry(
+                        index,
+                        TableRow(decoration: BoxDecoration(), children: [
+                          Container(
+                            height: setWidth(90),
+                            padding: EdgeInsets.only(left: 5),
+                            alignment: Alignment.centerLeft,
+                            child: Text('${residueModelList[index].xh}',
+                                style: TextStyle(
+                                    fontSize: setSp(28),
+                                    fontWeight: FontWeight.w500)),
                           ),
-                        ),
-                        Container(
-                          height: setWidth(90),
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          child: Text('${residueModelList[index].price}'),
-                        ),
-                        Container(
-                          height: setWidth(90),
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 20,
-                                child: RaisedButton(
-                                  onPressed: () {
-                                    if (residueModelList[index].currentOutNum <
-                                        int.parse(
+                          Container(
+                            height: setWidth(90),
+                            padding: EdgeInsets.only(left: 5),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '${residueModelList[index].residueNum}',
+                            ),
+                          ),
+                          Container(
+                            height: setWidth(90),
+                            padding: EdgeInsets.only(left: 5),
+                            alignment: Alignment.centerLeft,
+                            child: Text('${residueModelList[index].price}'),
+                          ),
+                          Container(
+                            height: setWidth(90),
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 20,
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      if (residueModelList[index].currentOutNum <
+                                          residueModelList[index]
+                                              .residueNum) {
+                                        if (mounted) {
+                                          setState(() {
                                             residueModelList[index]
-                                                .residueNum)) {
+                                                .currentOutNum++;
+                                          });
+                                        }
+                                      } else {
+                                        showToast('已达到最大库存！');
+                                      }
+                                    },
+                                    child: Text(
+                                      '+',
+                                      style: TextStyle(
+                                          fontSize: setSp(36), color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                                Text('${residueModelList[index].currentOutNum}'),
+                                Container(
+                                  width: 40,
+                                  height: 20,
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      if (residueModelList[index].currentOutNum ==
+                                          0)
+                                        return;
                                       if (mounted) {
                                         setState(() {
-                                          residueModelList[index]
-                                              .currentOutNum++;
+                                          residueModelList[index].currentOutNum--;
                                         });
                                       }
-                                    } else {
-                                      showToast('已达到最大库存！');
-                                    }
-                                  },
-                                  child: Text(
-                                    '+',
-                                    style: TextStyle(
-                                        fontSize: setSp(36), color: Colors.red),
+                                    },
+                                    child: Text(
+                                      '-',
+                                      style: TextStyle(
+                                          fontSize: setSp(36), color: Colors.red),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Text('${residueModelList[index].currentOutNum}'),
-                              Container(
-                                width: 40,
-                                height: 20,
-                                child: RaisedButton(
-                                  onPressed: () {
-                                    if (residueModelList[index].currentOutNum ==
-                                        0)
-                                      return;
-                                    if (mounted) {
-                                      setState(() {
-                                        residueModelList[index].currentOutNum--;
-                                      });
-                                    }
-                                  },
-                                  child: Text(
-                                    '-',
-                                    style: TextStyle(
-                                        fontSize: setSp(36), color: Colors.red),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ])))
-                  .values
-                  .toList()),
-            ))
-      ],
+                                )
+                              ],
+                            ),
+                          )
+                        ])))
+                    .values
+                    .toList()),
+              ))
+        ],
+      ),
     );
   }
 
@@ -446,11 +450,11 @@ class _InOrOutPageState extends State<InOrOutPage> {
           intAndOut: inOrOutTitle,
           type: goodTypeTitle,
           model: xhController.text.trim(),
-          price: priceController.text.trim(),
-          num: numController.text.trim(),
-          outNum: '0',
-          residueNum: numController.text.trim(),
-          outPrice: '0',
+          price: UtilsWidget.str2double(priceController.text.trim()),
+          num: UtilsWidget.str2int( numController.text.trim()),
+          outNum: 0,
+          residueNum: UtilsWidget.str2int(numController.text.trim()),
+          outPrice: 0.0,
           time: DateUtils.DatePaserToMils(goodTime),
           systemTime: DateTime.now().toString());
       inAndOutTableList.add(table);
@@ -463,10 +467,10 @@ class _InOrOutPageState extends State<InOrOutPage> {
               type: goodTypeTitle,
               model: xhController.text.trim(),
               price: element.price,
-              num: '0',
-              outNum: element.outNum.toString(),
-              residueNum: '0',
-              outPrice: priceController.text.trim(),
+              num: 0,
+              outNum: element.outNum,
+              residueNum: 0,
+              outPrice: UtilsWidget.str2double(priceController.text.trim()),
               time: DateUtils.DatePaserToMils(goodTime),
               systemTime: DateTime.now().toString()
           );
@@ -474,10 +478,8 @@ class _InOrOutPageState extends State<InOrOutPage> {
           //2.修改库存
           GoodAttributeTable upDataTable = GoodAttributeTable(
             id: element.id,
-            outNum: (int.parse(element.outNum) + element.currentOutNum)
-                .toString(), //出库数 = 以前出库数+将要出库数
-            residueNum: (int.parse(element.residueNum) - element.currentOutNum)
-                .toString(), //剩余 = 以前剩余数-将要出库数
+            outNum: (element.outNum + element.currentOutNum), //出库数 = 以前出库数+将要出库数
+            residueNum: (element.residueNum - element.currentOutNum), //剩余 = 以前剩余数-将要出库数
           );
           upDataTableList.add(upDataTable);
         }
@@ -491,6 +493,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
 
   //检查待出库数量是否匹配输入数量
   bool checkOutNum() {
+    if(inOrOutTitle=='入库')return true;
     totalOutNum = 0;
     residueModelList.forEach((element) {
       totalOutNum += element.currentOutNum;
@@ -538,6 +541,16 @@ class _InOrOutPageState extends State<InOrOutPage> {
         insertData(rsqProvide);
         updateData(rsqProvide);
         break;
+      case '小家电':
+        XjdProvide rsqProvide = Provider.of<XjdProvide>(context, listen: false);
+        insertData(rsqProvide);
+        updateData(rsqProvide);
+        break;
+      case '配件':
+        PjProvide rsqProvide = Provider.of<PjProvide>(context, listen: false);
+        insertData(rsqProvide);
+        updateData(rsqProvide);
+        break;
     }
 
     GlobalEvent.eventBus.fire(InAndOutEvent(type: goodTypeTitle));
@@ -569,8 +582,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
         provider = Provider.of<BxProvide>(context, listen: false);
         break;
       case '洗衣机':
-        provider =
-            Provider.of<XyjProvide>(context, listen: false);
+        provider = Provider.of<XyjProvide>(context, listen: false);
         break;
       case '空调':
         provider = Provider.of<KtProvide>(context, listen: false);
@@ -580,13 +592,18 @@ class _InOrOutPageState extends State<InOrOutPage> {
         break;
       case '燃气灶':
         provider = Provider.of<RqzProvide>(context, listen: false);
-        checkSameXhRecordFunction(provider);
         break;
       case '油烟机':
         provider = Provider.of<YyjProvide>(context, listen: false);
         break;
       case '热水器':
         provider = Provider.of<RsqProvide>(context, listen: false);
+        break;
+      case '小家电':
+        provider = Provider.of<XjdProvide>(context, listen: false);
+        break;
+      case '配件':
+        provider = Provider.of<PjProvide>(context, listen: false);
         break;
     }
     checkSameXhRecordFunction(provider);
@@ -598,6 +615,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
     await provider.checkSameXhRecord(xhController.text.trim());
     if (sameXhRecordList.length > 0) {
       showToast('查询出${sameXhRecordList.length}条数据');
+      residueModelList.clear();
       sameXhRecordList.forEach((element) {
         residueModelList.add(
             ResidueModel(
@@ -622,10 +640,10 @@ class _InOrOutPageState extends State<InOrOutPage> {
 class ResidueModel {
   int id;
   String xh;
-  String num; //总数量
-  String residueNum; //剩余数量
-  String price;
-  String outNum;
+  int num; //总数量
+  int residueNum; //剩余数量
+  double price;
+  int outNum;
   int currentOutNum;
 
   ResidueModel(this.id, this.xh, this.num, this.residueNum, this.price,

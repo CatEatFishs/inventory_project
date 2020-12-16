@@ -1,16 +1,16 @@
 class ResidueGoodModel {
   String model;
   String time;
-  String price;
-  int sumNum;
+  double price;
+  int residueNum;
 
-  ResidueGoodModel({this.model, this.time, this.price, this.sumNum});
+  ResidueGoodModel({this.model, this.time, this.price, this.residueNum});
 
   ResidueGoodModel.fromJson(Map<String, dynamic> json) {
     model = json['model'];
     time = json['time'];
     price = json['price'];
-    sumNum = json['sum(num)'];
+    residueNum = json['residueNum'];
   }
 
   Map<String, dynamic> toJson() {
@@ -18,7 +18,7 @@ class ResidueGoodModel {
     data['model'] = this.model;
     data['time'] = this.time;
     data['price'] = this.price;
-    data['sum(num)'] = this.sumNum;
+    data['residueNum'] = this.residueNum;
     return data;
   }
 }

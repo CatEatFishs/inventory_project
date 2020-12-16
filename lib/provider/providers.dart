@@ -3,12 +3,14 @@
 /// [Date] 2019-11-08 10:53
 ///
 import 'package:flutter/foundation.dart';
+import 'package:inventoryproject/provider/xjd_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import 'bx_provider.dart';
 import 'ds_provider.dart';
 import 'kt_provider.dart';
+import 'pj_provider.dart';
 import 'rqz_provider.dart';
 import 'rsq_provider.dart';
 import 'test_provider.dart';
@@ -31,5 +33,6 @@ final _providers = [
   buildProvider<RqzProvide>(RqzProvide()..init()),
   buildProvider<XyjProvide>(XyjProvide()..init()),
   buildProvider<YyjProvide>(YyjProvide()..init()),
-  buildProvider<TestProvider>(TestProvider()..init())
+  buildProvider<XjdProvide>(XjdProvide()..init()),
+  buildProvider<PjProvide>(PjProvide()..init())
 ];

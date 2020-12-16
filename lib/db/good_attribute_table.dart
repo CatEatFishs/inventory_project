@@ -48,13 +48,13 @@ class GoodAttributeTable extends BaseProvider {
   String intAndOut; //出入库
   String type; //类型
   String model; //型号
-  String price; //价格
-  String outPrice; //卖出价格
-  String num; //数量
+  double price; //价格
+  double outPrice; //卖出价格
+  int num; //数量
   String time; //出入库时间
   String systemTime; //系统时间
-  String outNum; //出库数量
-  String residueNum; //剩余数量
+  int outNum; //出库数量
+  int residueNum; //剩余数量
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -65,7 +65,7 @@ class GoodAttributeTable extends BaseProvider {
       _columnNum: num,
       _columnTime: time,
       _columnSystemTime: systemTime,
-      _columnOutNum: outNum ?? '0',
+      _columnOutNum: outNum ?? 0,
       _columnResidueNum: residueNum ?? num,
       _columnOutPrice: outPrice
     };
@@ -116,13 +116,13 @@ class GoodAttributeTable extends BaseProvider {
         $_columnIntAndOut text ,
         $_columnType text ,
         $_columnModel text ,
-        $_columnPrice text ,
-        $_columnOutPrice text,
-        $_columnNum text ,
+        $_columnPrice REAL ,
+        $_columnOutPrice REAL,
+        $_columnNum INTEGER ,
         $_columnTime text ,
         $_columnSystemTime text,
-        $_columnOutNum text,
-        $_columnResidueNum text)
+        $_columnOutNum INTEGER,
+        $_columnResidueNum INTEGER)
         """;
   }
 
@@ -164,14 +164,14 @@ class GoodAttributeTable extends BaseProvider {
     return newList;
   }
 
-  //查询
+  //查询剩余数量
   Future<List<ResidueGoodModel>> queryResidueAll(Database database,
       String tableName,
       {String type, String model, String price}) async {
     // String sql="SELECT * FROM $tableName WHERE $_columnIntAndOut='入库' ORDER BY time DESC";
     String sql =
-        "select model,price,time,sum(num) FROM $tableName group by model";
-
+        "select model,MIN(price) price,time,sum(residueNum) residueNum FROM $tableName group by model ";
+    debugPrint('sql----$sql----');
     List<Map<String, dynamic>> result = await database.rawQuery(sql);
     List<ResidueGoodModel> newList = List();
 

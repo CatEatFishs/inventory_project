@@ -4,6 +4,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:inventoryproject/db/good_attribute_table.dart';
 import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
+import 'package:inventoryproject/provider/default_provider.dart';
 import 'package:inventoryproject/provider/ds_provider.dart';
 import 'package:inventoryproject/provider/kt_provider.dart';
 import 'package:inventoryproject/provider/rqz_provider.dart';
@@ -35,11 +36,8 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
 
   @override
   void initState() {
-    inAndOutEventStreamSubscription =
-        GlobalEvent.eventBus.on<InAndOutEvent>().listen((value) {
-      if (value.type != null &&
-          value.type.isNotEmpty &&
-          value.type == this.widget.goodName) {
+    inAndOutEventStreamSubscription = GlobalEvent.eventBus.on<InAndOutEvent>().listen((value) {
+      if (value.type != null && value.type.isNotEmpty && value.type == this.widget.goodName) {
         getCheck();
       }
     });
@@ -75,9 +73,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text('${goodList[index].model}',
-                          style: TextStyle(
-                              fontSize: setSp(28),
-                              fontWeight: FontWeight.w500)),
+                          style: TextStyle(fontSize: setSp(28), fontWeight: FontWeight.w500)),
                     ),
                     Container(
                       height: setWidth(90),
@@ -91,14 +87,13 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
                       height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
-                      child: Text('${goodList[index].sumNum}'),
+                      child: Text('${goodList[index].residueNum}'),
                     ),
                     Container(
                       height: setWidth(90),
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                          '${DateUtils.DatePaserToYMD(goodList[index].time)}'),
+                      child: Text('${DateUtils.DatePaserToYMD(goodList[index].time)}'),
                     )
                   ])))
               .values
@@ -125,10 +120,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: Container(
-                margin: EdgeInsets.only(
-                    left: setWidth(15), right: setWidth(15)),
-                child: dataWidget()),
+            child: Container(margin: EdgeInsets.only(left: setWidth(15), right: setWidth(15)), child: dataWidget()),
           )
         ],
       ),
@@ -138,48 +130,46 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
   Widget headWidget() {
     return Container(
         child: Table(
-          //表格边框样式
-          border: TableBorder(
-            top: BorderSide(color: Colors.black.withOpacity(0.5)),
-            right: BorderSide(color: Colors.black.withOpacity(0.5)),
-            // bottom: BorderSide(color:Colors.black.withOpacity(0.5) ),
-            left: BorderSide(color: Colors.black.withOpacity(0.5)),
-            horizontalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
-            verticalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
+      //表格边框样式
+      border: TableBorder(
+        top: BorderSide(color: Colors.black.withOpacity(0.5)),
+        right: BorderSide(color: Colors.black.withOpacity(0.5)),
+        // bottom: BorderSide(color:Colors.black.withOpacity(0.5) ),
+        left: BorderSide(color: Colors.black.withOpacity(0.5)),
+        horizontalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
+        verticalInside: BorderSide(color: Colors.black.withOpacity(0.5)),
+      ),
+      children: [
+        TableRow(decoration: BoxDecoration(), children: [
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text('型号', style: TextStyle(fontSize: setSp(28), fontWeight: FontWeight.w500)),
           ),
-          children: [
-            TableRow(decoration: BoxDecoration(), children: [
-              Container(
-                height: setWidth(60),
-                padding: EdgeInsets.only(left: 5),
-                alignment: Alignment.centerLeft,
-                child: Text('型号',
-                style: TextStyle(
-                    fontSize: setSp(28), fontWeight: FontWeight.w500)),
-              ),
-              Container(
-                height: setWidth(60),
-                padding: EdgeInsets.only(left: 5),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '价格',
-                ),
-              ),
-              Container(
-                height: setWidth(60),
-                padding: EdgeInsets.only(left: 5),
-                alignment: Alignment.centerLeft,
-                child: Text('剩余数量'),
-              ),
-              Container(
-                height: setWidth(60),
-                padding: EdgeInsets.only(left: 5),
-                alignment: Alignment.centerLeft,
-                child: Text('时间'),
-              )
-            ])
-          ],
-        ));
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '最低价格',
+            ),
+          ),
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text('剩余数量'),
+          ),
+          Container(
+            height: setWidth(60),
+            padding: EdgeInsets.only(left: 5),
+            alignment: Alignment.centerLeft,
+            child: Text('时间'),
+          )
+        ])
+      ],
+    ));
   }
 
   Widget dataWidget() {
@@ -187,44 +177,43 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
   }
 
   void getCheck() async {
+    DefaultProvider provider;
     switch (this.widget.goodName) {
       case '冰箱':
-        BxProvide bxProvider = Provider.of<BxProvide>(context, listen: false);
-        goodList = await bxProvider.queryResidueAll();
+        provider = Provider.of<BxProvide>(context, listen: false);
         break;
       case '洗衣机':
-        XyjProvide xyjProvider = Provider.of<XyjProvide>(
-            context, listen: false);
-        goodList = await xyjProvider.queryResidueAll();
+        provider = Provider.of<XyjProvide>(context, listen: false);
         break;
       case '空调':
-        KtProvide ktProvider = Provider.of<KtProvide>(context, listen: false);
-        goodList = await ktProvider.queryResidueAll();
+        provider = Provider.of<KtProvide>(context, listen: false);
         break;
       case '电视':
-        DsProvide dsProvider = Provider.of<DsProvide>(context, listen: false);
-        goodList = await dsProvider.queryResidueAll();
+        provider = Provider.of<DsProvide>(context, listen: false);
         break;
       case '燃气灶':
-        RqzProvide rqzProvider =
-            Provider.of<RqzProvide>(context, listen: false);
-        goodList = await rqzProvider.queryResidueAll();
+        provider = Provider.of<RqzProvide>(context, listen: false);
         break;
       case '油烟机':
-        YyjProvide yyjProvider =
-            Provider.of<YyjProvide>(context, listen: false);
-        goodList = await yyjProvider.queryResidueAll();
+        provider = Provider.of<YyjProvide>(context, listen: false);
         break;
       case '热水器':
-        RsqProvide rsqProvider =
-            Provider.of<RsqProvide>(context, listen: false);
-        goodList = await rsqProvider.queryResidueAll();
+        provider = Provider.of<RsqProvide>(context, listen: false);
+        break;
+      case '小家电':
+        provider = Provider.of<RsqProvide>(context, listen: false);
+        break;
+      case '配件':
+        provider = Provider.of<RsqProvide>(context, listen: false);
         break;
     }
-    if (mounted) {
-      setState(() {
+    queryResidueAll(provider);
+  }
 
-      });
+  queryResidueAll(DefaultProvider provider) async {
+    goodList = await provider.queryResidueAll();
+    if (mounted) {
+      setState(() {});
     }
   }
 }
