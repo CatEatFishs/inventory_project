@@ -541,7 +541,8 @@ class _InOrOutPageState extends State<InOrOutPage> {
         updateData(rsqProvide);
         break;
       case '小家电':
-        XjdProvide rsqProvide = Provider.of<XjdProvide>(context, listen: false);
+        Xjdprovider rsqProvide =
+            Provider.of<Xjdprovider>(context, listen: false);
         insertData(rsqProvide);
         updateData(rsqProvide);
         break;
@@ -599,7 +600,7 @@ class _InOrOutPageState extends State<InOrOutPage> {
         provider = Provider.of<RsqProvide>(context, listen: false);
         break;
       case '小家电':
-        provider = Provider.of<XjdProvide>(context, listen: false);
+        provider = Provider.of<Xjdprovider>(context, listen: false);
         break;
       case '配件':
         provider = Provider.of<PjProvide>(context, listen: false);

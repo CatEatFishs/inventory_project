@@ -4,8 +4,10 @@ import 'package:inventoryproject/model/residue_good_model.dart';
 import 'package:inventoryproject/provider/bx_provider.dart';
 import 'package:inventoryproject/provider/ds_provider.dart';
 import 'package:inventoryproject/provider/kt_provider.dart';
+import 'package:inventoryproject/provider/pj_provider.dart';
 import 'package:inventoryproject/provider/rqz_provider.dart';
 import 'package:inventoryproject/provider/rsq_provider.dart';
+import 'package:inventoryproject/provider/xjd_provider.dart';
 import 'package:inventoryproject/provider/xyj_provider.dart';
 import 'package:inventoryproject/provider/yyj_provider.dart';
 import 'package:inventoryproject/utils/dialog_utils.dart';
@@ -41,6 +43,9 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
   RqzProvide rqzProvider;
   YyjProvide yyjProvider;
   RsqProvide rsqProvider;
+  Xjdprovider xjdProvider;
+  PjProvide pjProvider;
+
   @override
   void initState() {
     inAndOutEventStreamSubscription =
@@ -131,7 +136,8 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
                         alignment: Alignment.centerLeft,
                         color: goodList[index].isSelect?Colors.black.withOpacity(0.3):Colors.white,
                         child: Text(
-                          '${goodList[index].price}',
+                          goodList[index].intAndOut == '入库' ? '${goodList[index]
+                              .price}' : '${goodList[index].outPrice}',
                         ),
                       ),
                     ),
@@ -146,8 +152,11 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
                         height: setWidth(90),
                         padding: EdgeInsets.only(left: 5),
                         alignment: Alignment.centerLeft,
-                        color: goodList[index].isSelect?Colors.black.withOpacity(0.3):Colors.white,
-                        child: Text('${goodList[index].num}'),
+                        color: goodList[index].isSelect ? Colors.black
+                            .withOpacity(0.3) : Colors.white,
+                        child: Text(goodList[index].intAndOut == '入库'
+                            ? '${goodList[index].num}'
+                            : '-${goodList[index].outNum}'),
                       ),
                     ),
                     GestureDetector(
@@ -317,6 +326,14 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
         rsqProvider = Provider.of<RsqProvide>(context, listen: false);
         goodList = await rsqProvider.queryAll();
         break;
+      case '小家电':
+        xjdProvider = Provider.of<Xjdprovider>(context, listen: false);
+        goodList = await xjdProvider.queryAll();
+        break;
+      case '配件':
+        pjProvider = Provider.of<PjProvide>(context, listen: false);
+        goodList = await pjProvider.queryAll();
+        break;
     }
     if (mounted) {
       setState(() {});
@@ -347,6 +364,12 @@ class _GoodShowListPageState extends State<GoodShowListPage> with AutomaticKeepA
         break;
       case '热水器':
         result = await rsqProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '小家电':
+        result = await xjdProvider.queryDeleteIdData(goodList[index].id);
+        break;
+      case '配件':
+        result = await pjProvider.queryDeleteIdData(goodList[index].id);
         break;
     }
     if(result==1){

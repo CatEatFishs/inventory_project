@@ -33,6 +33,6 @@ final _providers = [
   buildProvider<RqzProvide>(RqzProvide()..init()),
   buildProvider<XyjProvide>(XyjProvide()..init()),
   buildProvider<YyjProvide>(YyjProvide()..init()),
-  buildProvider<XjdProvide>(XjdProvide()..init()),
+  buildProvider<Xjdprovider>(Xjdprovider()..init()),
   buildProvider<PjProvide>(PjProvide()..init())
 ];

@@ -319,7 +319,9 @@ class _CheckRecordState extends State<CheckRecord> {
                       padding: EdgeInsets.only(left: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '${goodList[index].price}',
+                        goodList[index].intAndOut == '入库'
+                            ? '${goodList[index].price}'
+                            : '${goodList[index].outPrice}',
                       ),
                     ),
                     Container(
@@ -328,7 +330,7 @@ class _CheckRecordState extends State<CheckRecord> {
                       alignment: Alignment.centerLeft,
                       child: Text(goodList[index].intAndOut == '入库'
                           ? '${goodList[index].num}'
-                          : '${goodList[index].outNum}'),
+                          : '-${goodList[index].outNum}'),
                     ),
                     Container(
                       height: setWidth(90),

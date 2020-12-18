@@ -203,7 +203,7 @@ class _GoodShowResidueListState extends State<GoodShowResidueList> with Automati
         provider = Provider.of<RsqProvide>(context, listen: false);
         break;
       case '小家电':
-        provider = Provider.of<XjdProvide>(context, listen: false);
+        provider = Provider.of<Xjdprovider>(context, listen: false);
         break;
       case '配件':
         provider = Provider.of<PjProvide>(context, listen: false);

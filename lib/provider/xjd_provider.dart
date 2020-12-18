@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'default_provider.dart';
 
 //小家电provide
-class XjdProvide extends DefaultProvider {
+class Xjdprovider extends DefaultProvider {
   final String tableName = 'XjdDateBaseTable';
 
   init() async {
